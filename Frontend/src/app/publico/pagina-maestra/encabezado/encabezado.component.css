@@ -54,11 +54,12 @@ body {
 }
 
 .btn-register {
-    background-color: #1175d3;
-    color: white;
+    background-color: #480051;
+    color: white !important;
     padding: 10px 18px;
     border-radius: 5px;
     font-weight: bold;
+
 }
 
 .header-icons {
