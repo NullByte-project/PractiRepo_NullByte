@@ -7,14 +7,17 @@ import os
 load_dotenv()
 
 # Obtener la URI desde el entorno
-uri = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI")
+DATABASE_NAME = os.getenv("DATABASE_NAME")
 
 # Conectarse a MongoDB
-conn = MongoClient(uri, server_api=ServerApi('1'))
+conn = MongoClient(MONGO_URI, server_api=ServerApi('1'))
 
-# Verificación de conexión
 try:
     conn.admin.command('ping')
     print("Conexión realizada correctamente")
 except Exception as e:
     print("Error al conectar con MongoDB:", e)
+
+# 🔹 Base de datos a usar (desde .env)
+db = conn[DATABASE_NAME]

@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Response, status, HTTPException
-from config.db import conn
+from config.db import db
 from schemas.user import userEntity, usersEntity
 from models.user import User
 from passlib.hash import sha256_crypt
 from bson import ObjectId
 from starlette.status import HTTP_204_NO_CONTENT
 
-db = conn["repositorio_practicas"]
 user = APIRouter()
 
 @user.get('/users', response_model=list[User], tags=["users"])
