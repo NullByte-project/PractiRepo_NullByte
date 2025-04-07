@@ -7,4 +7,5 @@ router = APIRouter(prefix="/previews", tags=["previews"])
 
 @router.get("/{practice_id}", response_model=List[PreviewFragment])
 async def get_preview_fragments(practice_id: str):
-    return generate_preview(practice_id)
+    """Obtiene fragmentos de previsualización para una práctica"""
+    return await generate_preview(practice_id) 
