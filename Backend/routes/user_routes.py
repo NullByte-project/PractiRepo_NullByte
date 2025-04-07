@@ -11,8 +11,8 @@ from controllers.user_controller import (
 user = APIRouter(tags=["users"])
 
 @user.get('/users', response_model=list[User])
-def find_all_users():
-    return find_all_users_controller()
+async def find_all_users():
+    return await find_all_users_controller()
 
 @user.get('/users', response_model=list[User])
 async def find_all_users():

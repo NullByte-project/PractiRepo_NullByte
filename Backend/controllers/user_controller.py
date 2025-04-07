@@ -15,7 +15,8 @@ async def create_user_controller(user: User):
     new_user["password"] = sha256_crypt.hash(new_user["password"])
 
     custom_id = new_user.pop("id", None)
-    new_user["_id"] = custom_id if custom_id else str(ObjectId())
+    #new_user["_id"] = custom_id if custom_id else str(ObjectId())
+    new_user["_id"] = str(ObjectId())
 
     # Verifica duplicado
     if await db.user.find_one({"_id": new_user["_id"]}):
