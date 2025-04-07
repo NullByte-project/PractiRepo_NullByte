@@ -5,6 +5,8 @@ app = FastAPI(title="PRACTIREPO", description="Repositorio de practicas", versio
 
 app.include_router(user)
 
+# Evento de inicio para verificar conexión MongoDB
+
 # @app.get("/", tags=["Main"])
 # def main():
 #     return {"message": "Welcome to PractiRepo"}

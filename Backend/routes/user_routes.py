@@ -14,21 +14,25 @@ user = APIRouter(tags=["users"])
 def find_all_users():
     return find_all_users_controller()
 
+@user.get('/users', response_model=list[User])
+async def find_all_users():
+    return await find_all_users_controller()
+
 @user.post('/users', response_model=User)
-def create_user(user: User):
-    return create_user_controller(user)
+async def create_user(user: User):
+    return await create_user_controller(user)
 
 @user.get('/users/{id}', response_model=User)
-def find_user(id: str):
-    return find_user_controller(id)
+async def find_user(id: str):
+    return await find_user_controller(id)
 
 @user.put('/users/{id}', response_model=User)
-def update_user(id: str, user: User):
-    return update_user_controller(id, user)
+async def update_user(id: str, user: User):
+    return await update_user_controller(id, user)
 
 @user.delete('/users/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_user(id: str):
-    deleted = delete_user_controller(id)
+async def delete_user(id: str):
+    deleted = await delete_user_controller(id)
     if deleted:
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     else:

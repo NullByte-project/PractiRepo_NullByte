@@ -1,23 +1,19 @@
-from pymongo import MongoClient
-from pymongo.server_api import ServerApi
+# config/db.py
+from motor.motor_asyncio import AsyncIOMotorClient
 from dotenv import load_dotenv
+import asyncio
 import os
 
-# Cargar variables del .env
+# Cargar variables desde .env
 load_dotenv()
 
-# Obtener la URI desde el entorno
 MONGO_URI = os.getenv("MONGO_URI")
 DATABASE_NAME = os.getenv("DATABASE_NAME")
 
-# Conectarse a MongoDB
-conn = MongoClient(MONGO_URI, server_api=ServerApi('1'))
-
 try:
-    conn.admin.command('ping')
-    print("Conexión realizada correctamente")
+    client = AsyncIOMotorClient(MONGO_URI)
+    db = client[DATABASE_NAME]
+    db.list_collection_names()
+    print("Conexión exitosa")
 except Exception as e:
-    print("Error al conectar con MongoDB:", e)
-
-# 🔹 Base de datos a usar (desde .env)
-db = conn[DATABASE_NAME]
+    print(f"Error: {e}")
