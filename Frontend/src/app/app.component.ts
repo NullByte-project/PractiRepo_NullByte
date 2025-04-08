@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { EncabezadoComponent } from "./publico/pagina-maestra/encabezado/encabezado.component";
 import { InicioComponent } from "./publico/inicio/inicio.component";
 import { PiePaginaComponent } from "./publico/pagina-maestra/pie-pagina/pie-pagina.component";
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, EncabezadoComponent, InicioComponent, PiePaginaComponent],
+  imports: [EncabezadoComponent, PiePaginaComponent, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
