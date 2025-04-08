@@ -7,20 +7,20 @@ from passlib.hash import sha256_crypt
 
 async def find_all_users_controller():
     users_cursor = db.user.find()
-    users = await users_cursor.to_list(length=100)
+    users = await users_cursor.to_list(length=100) 
     return usersEntity(users)
 
 async def create_user_controller(user: User):
     new_user = dict(user)
     new_user["password"] = sha256_crypt.hash(new_user["password"])
 
-    custom_id = new_user.pop("id", None)
-    #new_user["_id"] = custom_id if custom_id else str(ObjectId())
+    new_user.pop("id", None)
     new_user["_id"] = str(ObjectId())
+    #new_user["_id"] = custom_id if custom_id else str(ObjectId())
 
     # Verifica duplicado
-    if await db.user.find_one({"_id": new_user["_id"]}):
-        new_user["_id"] = str(ObjectId())
+    # if await db.user.find_one({"_id": new_user["_id"]}):
+    #     new_user["_id"] = str(ObjectId())
 
     result = await db.user.insert_one(new_user)
     created_user = await db.user.find_one({"_id": result.inserted_id})

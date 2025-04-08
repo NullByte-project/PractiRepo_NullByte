@@ -1,12 +1,25 @@
 from fastapi import FastAPI
-from routes.user_routes import user
+from routes.PracticeRoutes import router as practice_router
+from routes.previewRoutes import router as preview_router
+from routes.user_routes import router as user_router
+from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
-app = FastAPI(title="PRACTIREPO", description="Repositorio de practicas", version="1.0.0")
+app = FastAPI(title="Gestión de Prácticas API")
 
-app.include_router(user)
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Evento de inicio para verificar conexión MongoDB
+# Incluir routers
+app.include_router(practice_router)
+app.include_router(preview_router)
+app.include_router(user_router)
 
-# @app.get("/", tags=["Main"])
-# def main():
-#     return {"message": "Welcome to PractiRepo"}
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
