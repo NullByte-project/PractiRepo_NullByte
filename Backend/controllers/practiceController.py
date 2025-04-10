@@ -13,6 +13,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Helper Functions
 
+
 async def save_uploaded_file(file: UploadFile) -> str:
     try:
         file_type = mimetypes.guess_type(file.filename)[0]
@@ -32,6 +33,7 @@ async def save_uploaded_file(file: UploadFile) -> str:
     except Exception as e:
         raise HTTPException(400, f"Error al guardar archivo: {str(e)}")
 
+
 def delete_file(file_path: str) -> bool:
     try:
         if os.path.exists(file_path):
@@ -42,6 +44,7 @@ def delete_file(file_path: str) -> bool:
         return False
 
 # CRUD Operations
+
 
 async def create_practice(
     title: str,
@@ -76,6 +79,7 @@ async def create_practice(
             delete_file(file_path)
         raise HTTPException(500, f"Error al crear práctica: {str(e)}")
 
+
 async def get_practice(practice_id: str) -> Practice:
     try:
         practice = await PracticeModel.get_by_id(practice_id)
@@ -86,6 +90,7 @@ async def get_practice(practice_id: str) -> Practice:
         return Practice(**practice)
     except Exception as e:
         raise HTTPException(500, f"Error al obtener práctica: {str(e)}")
+
 
 async def get_all_practices() -> List[Practice]:
     try:
@@ -109,12 +114,14 @@ async def get_all_practices() -> List[Practice]:
                 validated_practice = Practice(**practice_data)
                 result.append(validated_practice)
             except Exception as validation_error:
-                print(f"Error validando práctica {practice['_id']}: {validation_error}")
+                print(
+                    f"Error validando práctica {practice['_id']}: {validation_error}")
                 continue
 
         return result
     except Exception as e:
         raise HTTPException(500, f"Error al obtener prácticas: {str(e)}")
+
 
 async def get_practices_by_type(practice_type: str) -> List[Practice]:
     try:
@@ -122,6 +129,7 @@ async def get_practices_by_type(practice_type: str) -> List[Practice]:
         return [Practice(**practice, id=str(practice["_id"])) for practice in practices]
     except Exception as e:
         raise HTTPException(500, f"Error al obtener prácticas: {str(e)}")
+
 
 async def update_practice(
     practice_id: str,
@@ -178,6 +186,7 @@ async def update_practice(
             delete_file(new_file_path)
         raise HTTPException(500, f"Error al actualizar práctica: {str(e)}")
 
+
 async def delete_practice(practice_id: str) -> dict:
     try:
         practice = await PracticeModel.get_by_id(practice_id)
@@ -198,3 +207,43 @@ async def delete_practice(practice_id: str) -> dict:
         raise
     except Exception as e:
         raise HTTPException(500, f"Error al eliminar práctica: {str(e)}")
+# implementar filtros para mostrar practicas
+
+
+async def get_practices_by_filters(
+    title: Optional[str] = None,
+    year: Optional[int] = None,
+    municipality: Optional[str] = None,
+    practice_type: Optional[str] = None,
+    institution: Optional[str] = None,
+    author: Optional[str] = None
+
+) -> List[Practice]:
+    filters = {}
+    if title:
+        filters["title"] = title
+    if year:
+        filters["year"] = year
+    if municipality:
+        filters["municipality"] = municipality
+    if practice_type:
+        filters["practice_type"] = practice_type
+    if institution:
+        filters["institution"] = institution
+    if author:
+        filters["author"] = author
+
+    try:
+        # Filtrar manualmente si PracticeModel.get_all no soporta filtros
+        all_practices = await PracticeModel.get_all()
+        filtered_practices = [
+            practice for practice in all_practices
+            if all(
+                practice.get(key) == value
+                for key, value in filters.items()
+                if value is not None
+            )
+        ]
+        return [Practice(**practice, id=str(practice["_id"])) for practice in filtered_practices]
+    except Exception as e:
+        raise HTTPException(500, f"Error al obtener prácticas: {str(e)}")

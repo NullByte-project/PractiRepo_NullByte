@@ -5,7 +5,8 @@ from controllers.practiceController import (
     get_all_practices,
     get_practices_by_type,
     update_practice,
-    delete_practice
+    delete_practice, 
+    get_practices_by_filters
 )
 from schemas.schemaPractice import Practice
 from typing import Optional, List
@@ -32,6 +33,20 @@ async def create_practice_endpoint(
         municipality=municipality
     )
 
+#obtener practicas por filtro 
+@router.get("/filter", response_model=List[Practice])
+async def read_practices_by_filter(title: Optional[str] = None, year: Optional[int] = None, 
+                                   practice_type: Optional[str] = None, institution: Optional[str] = None, author: Optional[str] = None, 
+                                   municipality: Optional[str] = None):
+    return await get_practices_by_filters(
+        title = title,
+        year=year,
+        municipality=municipality,
+        practice_type=practice_type,
+        institution=institution,
+        author=author
+    )
+
 @router.get("/{practice_id}", response_model=Practice)
 async def read_practice(practice_id: str):
     return await get_practice(practice_id)
@@ -39,6 +54,7 @@ async def read_practice(practice_id: str):
 @router.get("/", response_model=List[Practice])
 async def read_all_practices():
     return await get_all_practices()
+
 
 @router.get("/type/{practice_type}", response_model=List[Practice])
 async def read_practices_by_type(practice_type: str):
