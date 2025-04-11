@@ -8,6 +8,8 @@ import { FooterComponent } from './public/master-page/footer/footer.component';
 import { PageNotFoundComponent } from './public/errors/page-not-found/page-not-found.component';
 import { ServerErrorComponent } from './public/errors/server-error/server-error.component';
 import { HomeComponent } from './public/home/home.component';
+import { ServicioLogicaService } from './servicios/servicio-logica.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,9 +23,10 @@ import { HomeComponent } from './public/home/home.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [ServicioLogicaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

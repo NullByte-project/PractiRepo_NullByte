@@ -1,1 +1,48 @@
-<p>list-practices works!</p>
+<div class="practice-container">
+    <h1>Listado de Prácticas</h1>
+  
+    <div *ngIf="isLoading" class="loading">
+      Cargando prácticas...
+    </div>
+  
+    <div *ngIf="!isLoading && practices.length === 0" class="no-results">
+      No se encontraron prácticas
+    </div>
+  
+    <div class="practice-list">
+      <div *ngFor="let practice of practices" class="practice-card">
+        <div class="card-header">
+          <span class="practice-type">{{practice.practice_type}}</span>
+        </div>
+        
+        <h3 class="practice-title">{{practice.title}}</h3>
+        
+        <div class="practice-meta">
+          <div *ngIf="practice.author" class="meta-item">
+            <span>👤 {{practice.author}}</span>
+          </div>
+          
+          <div *ngIf="practice.institution" class="meta-item">
+            <span>🏛️ {{practice.institution}}</span>
+          </div>
+          
+          <div *ngIf="practice.municipality" class="meta-item">
+            <span>📍 {{practice.municipality}}</span>
+          </div>
+          
+          <div class="meta-item">
+            <span>📅 {{practice.year}}</span>
+          </div>
+        </div>
+<!--          -->
+        <div class="card-actions">
+          <a [href]="practice.file_url" target="_blank" class="action-btn">
+            👁️ Ver
+          </a>
+          <a [href]="practice.file_url" download class="action-btn">
+            ⬇️ Descargar
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
