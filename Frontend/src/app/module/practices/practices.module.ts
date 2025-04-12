@@ -6,6 +6,8 @@ import { ListPracticesComponent } from './list-practices/list-practices.componen
 import { PracticeUploadComponent } from './practice-upload/practice-upload.component';
 import { PracticeDetailComponent } from './practice-detail/practice-detail.component';
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
+import { PracticeLoadComponent } from './practice-load/practice-load.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -13,11 +15,13 @@ import { PracticePreviewComponent } from './practice-preview/practice-preview.co
     ListPracticesComponent,
     PracticeUploadComponent,
     PracticeDetailComponent,
-    PracticePreviewComponent
+    PracticePreviewComponent,
+    PracticeLoadComponent
   ],
   imports: [
     CommonModule,
-    PracticesRoutingModule
+    PracticesRoutingModule,
+    ReactiveFormsModule,
   ]
 })
 export class PracticesModule { }

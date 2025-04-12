@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ListPracticesComponent } from './list-practices/list-practices.component';
 import { PracticeUploadComponent } from './practice-upload/practice-upload.component';
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
+import { PracticeLoadComponent } from './practice-load/practice-load.component';
 
 const routes: Routes = [
   {
@@ -20,6 +21,10 @@ const routes: Routes = [
   {
     path: 'practice-upload',
     component: PracticeUploadComponent
+  },
+  {
+    path: 'practice-load',
+    component: PracticeLoadComponent
   }
 ];
 
