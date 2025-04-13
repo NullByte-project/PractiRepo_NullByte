@@ -13,6 +13,7 @@ export class PracticeLoadComponent {
   isLoading = false;
   errorMessage = '';
   successMessage = '';
+  selectedFileName: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -37,6 +38,13 @@ export class PracticeLoadComponent {
         file: file
       });
     }
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (file) {
+      this.selectedFileName = file.name;
+      this.practiceForm.patchValue({ file });
+      this.practiceForm.get('file')?.updateValueAndValidity();
+    }
   }
 
   onSubmit() {
@@ -48,6 +56,16 @@ export class PracticeLoadComponent {
     this.isLoading = true;
     this.errorMessage = '';
     this.successMessage = '';
+
+
+    // Simulación de guardado
+    setTimeout(() => {
+      this.isLoading = false;
+      this.successMessage = 'Práctica guardada con éxito';
+
+      // Redirigir al mismo componente
+      this.router.navigate(['/practices/practice-load']); // Ajusta la ruta según tu configuración
+    }, 2000);
 
     const formData = new FormData();
     formData.append('title', this.practiceForm.get('title')?.value);
