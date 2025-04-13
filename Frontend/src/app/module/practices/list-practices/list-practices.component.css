@@ -87,3 +87,61 @@
       grid-template-columns: 1fr;
     }
   }
+  ::ng-deep pagination-controls .ngx-pagination li.current span {
+    background-color: #4B0055 !important; /* morado */
+    color: white !important;
+    border-radius: 8px !important;
+    border: none !important;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15) !important;
+    padding: 6px 12px !important;
+    font-weight: bold !important;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Anula fondo azul residual de Bootstrap o default */
+  ::ng-deep pagination-controls .ngx-pagination li.current,
+  ::ng-deep pagination-controls .ngx-pagination li.active {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  /* General de los botones */
+  ::ng-deep pagination-controls .ngx-pagination li span,
+  ::ng-deep pagination-controls .ngx-pagination li a {
+    background-color: transparent;
+    color: #4B0055;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  
+  /* Hover */
+  ::ng-deep pagination-controls .ngx-pagination li a:hover {
+    background-color: #f4e7fc;
+  }
+  
+  /* Deshabilitado */
+  ::ng-deep pagination-controls .ngx-pagination li.disabled span {
+    color: #ccc !important;
+    pointer-events: none;
+  }
+
+  ::ng-deep pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  
+  ::ng-deep .ngx-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0 auto;
+  }
+  

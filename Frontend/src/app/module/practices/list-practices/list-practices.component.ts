@@ -8,6 +8,8 @@ import { ServicioLogicaService } from 'src/app/servicios/servicio-logica.service
   styleUrls: ['./list-practices.component.css']
 })
 export class ListPracticesComponent {
+  p: number = 1;
+  
   practices: Practice[] = [];
   isLoading = true;
 
@@ -27,5 +29,7 @@ export class ListPracticesComponent {
       }
     });
   }
+
+  
 
 }

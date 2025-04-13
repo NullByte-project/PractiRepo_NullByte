@@ -8,6 +8,7 @@ import { PracticeDetailComponent } from './practice-detail/practice-detail.compo
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
 import { PracticeLoadComponent } from './practice-load/practice-load.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     PracticesRoutingModule,
     ReactiveFormsModule,
+    NgxPaginationModule
   ]
 })
 export class PracticesModule { }
