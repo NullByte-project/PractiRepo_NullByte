@@ -1,16 +1,64 @@
 <div class="practice-container">
   <h1>Listado de Prácticas</h1>
 
+  <!-- Sección de Filtros -->
+  <div class="filter-section">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="filter-row">
+        <div class="filter-group">
+          <input type="text" formControlName="title" placeholder="Buscar por título">
+        </div>
+
+        <div class="filter-group">
+          <input type="number" formControlName="year" placeholder="Filtrar por año">
+        </div>
+
+        <div class="filter-group">
+          <select formControlName="practice_type">
+            <option value="">Todos los tipos</option>
+            <option value="Informes de práctica institucional II">Informes de práctica institucional II</option>
+            <option value="Informes de proyectos de vida familiar y comunitaria I">Informes de proyectos de vida
+              familiar y comunitaria I</option>
+            <option value="Informes de proyectos de vida familiar y comunitaria II">Informes de proyectos de vida
+              familiar y comunitaria II</option>
+            <option value="Informes de proyectos de vida familiar y comunitaria III">Informes de proyectos de vida
+              familiar y comunitaria III</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <input type="text" formControlName="institution" placeholder="Filtrar por institución">
+        </div>
+
+        <div class="filter-group">
+          <input type="text" formControlName="author" placeholder="Filtrar por autor">
+        </div>
+
+        <div class="filter-group">
+          <input type="text" formControlName="municipality" placeholder="Filtrar por municipio">
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button type="button" (click)="resetFilters()" class="reset-btn">
+          Limpiar Filtros
+        </button>
+      </div>
+    </form>
+  </div>
+
   <div *ngIf="isLoading" class="loading">
     Cargando prácticas...
   </div>
 
-  <div *ngIf="!isLoading && practices.length === 0" class="no-results">
-    No se encontraron prácticas
+  <div *ngIf="!isLoading && filteredPractices.length === 0" class="no-results">
+    No se encontraron prácticas con los filtros aplicados
   </div>
 
   <div class="practice-list">
-    <div *ngFor="let practice of practices | paginate: { itemsPerPage: 9, currentPage: p, id: 'custom' }"
+    <div *ngFor="let practice of filteredPractices | paginate: { itemsPerPage: 9, currentPage: p, id: 'custom' }"
       class="practice-card">
       <div class="card-header">
         <span class="practice-type">{{practice.practice_type}}</span>
@@ -46,6 +94,4 @@
   <pagination-controls [id]="'custom'" (pageChange)="p = $event" [maxSize]="5" [responsive]="true" [autoHide]="true"
     template="default">
   </pagination-controls>
-
-
 </div>
