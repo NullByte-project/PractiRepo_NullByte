@@ -79,6 +79,13 @@ def test_update_practice_with_file():
     print("Practice updated successfully:", response.json())
     print("test_update_practice_with_file passed")
 
+def test_delete_practice():
+    practice_id = "67fb0b6eb47e8bc29d7c43b8"  # 🔁 Reemplaza con un ID válido
+    response = client.delete(f"/practices/{practice_id}")
+    assert response.status_code == 204
+    print("Practice deleted successfully")
+    print("test_delete_practice passed")
+
 
 
 if __name__ == "__main__":
@@ -86,7 +93,8 @@ if __name__ == "__main__":
     #test_create_practice_invalid_file()
     #test_list_all_practices()
     #test_get_practice_by_id()
-    test_update_practice_with_file()
+    #test_update_practice_with_file()
+    test_delete_practice()
     print("Test passed!")
 
 
