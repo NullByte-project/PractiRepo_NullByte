@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Practice } from 'src/app/model/practice.model';
 import { ServicioLogicaService } from 'src/app/servicios/servicio-logica.service';
 
@@ -9,18 +10,36 @@ import { ServicioLogicaService } from 'src/app/servicios/servicio-logica.service
 })
 export class ListPracticesComponent {
   p: number = 1;
-  
   practices: Practice[] = [];
+  filteredPractices: Practice[] = [];
   isLoading = true;
+  filterForm: FormGroup;
 
-  constructor(private servicioLogica: ServicioLogicaService) {}
+  constructor(
+    private servicioLogica: ServicioLogicaService,
+    private fb: FormBuilder
+  ) {
+    this.filterForm = this.fb.group({
+      title: [''],
+      year: [''],
+      practice_type: [''],
+      institution: [''],
+      author: [''],
+      municipality: ['']
+    });
+  }
+
   ngOnInit() {
     this.loadPractices();
+    this.setupFilterListeners();
   }
-  loadPractices(): void {
-    this.servicioLogica.getPractices().subscribe({
+
+  loadPractices(filters?: any): void {
+    this.isLoading = true;
+    this.servicioLogica.getPractices(filters).subscribe({
       next: (data) => {
         this.practices = data;
+        this.filteredPractices = [...data];
         this.isLoading = false;
       },
       error: (err) => {
@@ -30,6 +49,19 @@ export class ListPracticesComponent {
     });
   }
 
-  
+  setupFilterListeners(): void {
+    this.filterForm.valueChanges.subscribe(() => {
+      this.applyFilters();
+    });
+  }
 
+  applyFilters(): void {
+    const filters = this.filterForm.value;
+    this.loadPractices(filters);
+  }
+
+  resetFilters(): void {
+    this.filterForm.reset();
+    this.loadPractices();
+  }
 }
