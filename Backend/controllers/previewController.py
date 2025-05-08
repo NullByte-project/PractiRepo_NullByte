@@ -9,12 +9,10 @@ from typing import List
 async def generate_preview(practice_id: str) -> List[PreviewFragment]:
     """Genera fragmentos de previsualización para un documento"""
     try:
-        # 🔁 Asegurarse de usar await en funciones async
         existing_preview = await PreviewModel.get_preview(practice_id)
         if existing_preview:
             return [PreviewFragment(**frag) for frag in existing_preview.get("fragments", [])]
 
-        # 🔁 Obtener práctica correctamente
         practice = await PracticeModel.get_by_id(practice_id)
         if not practice:
             raise HTTPException(status_code=404, detail="Practice not found")

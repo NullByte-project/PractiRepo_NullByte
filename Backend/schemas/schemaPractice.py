@@ -3,6 +3,7 @@ from typing import Optional, List
 from enum import Enum
 
 class PracticeType(str, Enum):
+    INSTITUCIONAL_I = "Informes de práctica institucional I"
     INSTITUCIONAL_II = "Informes de práctica institucional II"
     VIDA_FAMILIAR_I = "Informes de proyectos de vida familiar y comunitaria I"
     VIDA_FAMILIAR_II = "Informes de proyectos de vida familiar y comunitaria II"

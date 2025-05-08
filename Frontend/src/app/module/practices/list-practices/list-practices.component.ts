@@ -38,6 +38,7 @@ export class ListPracticesComponent {
     this.isLoading = true;
     this.servicioLogica.getPractices(filters).subscribe({
       next: (data) => {
+        console.log(data)
         this.practices = data;
         this.filteredPractices = [...data];
         this.isLoading = false;

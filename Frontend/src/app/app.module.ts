@@ -12,6 +12,8 @@ import { ServicioLogicaService } from './servicios/servicio-logica.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,7 +26,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+
   ],
   providers: [ServicioLogicaService],
   bootstrap: [AppComponent]

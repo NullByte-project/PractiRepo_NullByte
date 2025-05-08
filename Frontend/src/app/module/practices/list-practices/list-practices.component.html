@@ -85,7 +85,7 @@
       </div>
 
       <div class="card-actions">
-        <a [href]="practice.file_url" target="_blank" class="action-btn">👁️ Ver</a>
+        <a [routerLink]="['/practices/practice-preview', practice.id]" class="action-btn">👁️ Ver</a>
         <a [href]="practice.file_url" target="_blank" class="action-btn">🔓 Solicitar acceso</a>
       </div>
     </div>

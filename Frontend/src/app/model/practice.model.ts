@@ -1,5 +1,5 @@
 export interface Practice {
-  _id: string;
+  id: string;
   title: string;
   year: number;
   practice_type: string;
@@ -8,3 +8,4 @@ export interface Practice {
   author?: string;
   municipality?: string;
 }
+

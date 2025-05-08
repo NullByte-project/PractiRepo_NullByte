@@ -17,7 +17,7 @@ class PracticeModel:
     @classmethod
     async def get_all(cls) -> List[Dict[str, Any]]:
         cursor = cls.collection.find()
-        return await cursor.to_list(length=None)  # ✅ Aquí está la solución clave
+        return await cursor.to_list(length=None)  
 
     @classmethod
     async def get_by_type(cls, practice_type: str) -> List[Dict[str, Any]]:
