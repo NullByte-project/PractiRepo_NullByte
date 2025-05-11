@@ -24,5 +24,3 @@ def test_generate_preview_success():
 
 if __name__ == "__main__":
     test_generate_preview_success()
-
-

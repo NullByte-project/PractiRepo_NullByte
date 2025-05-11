@@ -1,12 +1,16 @@
 from fastapi import APIRouter, Response, status
+from fastapi.responses import JSONResponse
 from models.user_models import User
 from controllers.user_controller import (
     find_all_users_controller,
     create_user_controller,
     find_user_controller,
+    login_user_controller,
+    register_user_controller,
     update_user_controller,
     delete_user_controller,
 )
+from schemas.user_schema import TokenResponse, UserCreate, UserLogin, UserPublic
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -41,3 +45,14 @@ async def delete_user(id: str):
         return Response(status_code=status.HTTP_204_NO_CONTENT)
     else:
         return Response(status_code=status.HTTP_404_NOT_FOUND)
+    
+
+#Logica de login
+@router.post("/register", response_model=UserPublic)
+async def register_user(data: UserCreate):
+    return await register_user_controller(data)
+
+@router.post("/login", response_model=TokenResponse)
+async def login(data: UserLogin):
+    token = await login_user_controller(data)
+    return JSONResponse(content=token.dict(), status_code=200)

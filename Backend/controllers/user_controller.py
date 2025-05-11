@@ -1,9 +1,15 @@
 from bson import ObjectId
 from fastapi import HTTPException
 from config.db import db
-from schemas.user_schema import userEntity, usersEntity
+from config.jwt_manager import encode_jwt
+from schemas.user_schema import TokenResponse, UserCreate, UserLogin, userEntity, usersEntity, UserPublic
 from models.user_models import User
 from passlib.hash import sha256_crypt
+from passlib.context import CryptContext
+from datetime import datetime, timedelta
+import jwt
+
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 async def find_all_users_controller():
     users_cursor = db.user.find()
@@ -49,3 +55,52 @@ async def delete_user_controller(id: str):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return True
+
+#Metodos personalizados
+
+async def get_user_by_email(email: str):
+    return await db.user.find_one({"email": email})
+
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+
+def verify_password(plain: str, hashed: str) -> bool:
+    return pwd_context.verify(plain, hashed)
+
+async def register_user_controller(data: UserCreate) -> UserPublic:
+    existing = await db.user.find_one({"email": data.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email ya registrado")
+
+    user_dict = data.dict()
+    user_dict["password"] = pwd_context.hash(user_dict["password"])
+    user_dict["role_id"] = ObjectId(user_dict["role_id"])  # ✅ convertir a ObjectId
+
+    result = await db.user.insert_one(user_dict)
+    saved = await db.user.find_one({"_id": result.inserted_id})
+
+    return UserPublic(
+        id=str(saved["_id"]),
+        name=saved["name"],
+        email=saved["email"],
+        role_id=str(saved["role_id"])
+    )
+
+async def login_user_controller(user: UserLogin) -> TokenResponse:
+    db_user = await db.user.find_one({"email": user.email})
+    if not db_user or not pwd_context.verify(user.password, db_user["password"]):
+        raise HTTPException(status_code=401, detail="Credenciales inválidas")
+
+    role = await db.roles.find_one({"_id": db_user["role_id"]})
+    if not role:
+        raise HTTPException(status_code=404, detail="Rol no encontrado")
+
+    payload = {
+        "sub": db_user["email"],
+        "role_id": str(db_user["role_id"]),
+        "role": role["name"],
+        "permissions": role["permissions"]
+    }
+
+    token = encode_jwt(payload)
+    return TokenResponse(access_token=token)
