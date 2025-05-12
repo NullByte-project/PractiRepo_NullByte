@@ -1,1 +1,70 @@
-<p>practice-preview works!</p>
+<div class="detail-container">
+    <!-- Estado de carga -->
+    <div *ngIf="isLoading" class="loading">
+      <div class="spinner"></div>
+      <p>Cargando previsualización...</p>
+    </div>
+  
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <!-- Contenido principal -->
+    <div *ngIf="practice && !isLoading" class="practice-detail">
+      <!-- Encabezado -->
+      <div class="practice-header">
+        <div class="file-icon">
+          <!-- <span class="text-icon">{{ getFileIcon() }}</span> -->
+        </div>
+        <div class="header-info">
+          <h1>{{ practice.title }}</h1>
+          
+          <!-- Metadatos -->
+          <div class="practice-meta">
+            <span *ngIf="practice.author" class="meta-item">
+              <span class="text-icon">👤</span> {{ practice.author }}
+            </span>
+            <span *ngIf="practice.institution" class="meta-item">
+              <span class="text-icon">🏛️</span> {{ practice.institution }}
+            </span>
+            <span *ngIf="practice.municipality" class="meta-item">
+              <span class="text-icon">📍</span> {{ practice.municipality }}
+            </span>
+            <span class="meta-item">
+              <span class="text-icon">📅</span> {{ practice.year }}
+            </span>
+          </div>
+        </div>
+      </div>
+  
+      <!-- Sección de previsualización -->
+      <div class="preview-section">
+        <h2>Previsualización del Documento</h2>
+        
+        <div *ngIf="fragments.length === 0" class="no-preview">
+          No hay vista previa disponible para este documento
+        </div>
+  
+        <!-- Fragmentos del documento -->
+        <div *ngFor="let fragment of fragments" class="preview-fragment">
+          <div class="fragment-header">
+            <span class="page-number">Página {{ fragment.page_number }} de {{ fragment.total_pages }}</span>
+          </div>
+          <div class="fragment-content">
+            {{ fragment.content }}
+          </div>
+        </div>
+      </div>
+  
+      <!-- Acciones -->
+      <div class="actions">
+        <a [href]="practice.file_url" target="_blank" class="action-btn">
+          <span class="text-icon">👁️</span> Ver documento completo
+        </a>
+        <a [href]="practice.file_url" download class="action-btn">
+          <span class="text-icon">⬇️</span> Descargar
+        </a>
+      </div>
+    </div>
+  </div>

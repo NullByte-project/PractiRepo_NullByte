@@ -15,7 +15,7 @@ const routes: Routes = [
     component: PracticeUploadComponent
   },
   {
-    path: 'practice-preview',
+    path: 'practice-preview/:id',
     component: PracticePreviewComponent
   },
   {

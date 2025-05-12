@@ -1,13 +1,13 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional, List
-def userEntity(item) -> dict:
-    return {
-        "_id": str(item["_id"]),
-        "name": item["name"],
-        "email": item["email"],
-        "password": item["password"],
-        "role_id": str(item.get("role_id", ""))
-    }
+from bson import ObjectId
+def userEntity(user) -> dict:
+     return {
+            "id": str(user["_id"]) if isinstance(user["_id"], ObjectId) else user["_id"],
+            "name": user.get("name", ""),
+            "email": user.get("email", ""),
+            "role_id": str(user.get("role_id")) if user.get("role_id") else None
+        }
 
 
 def usersEntity(entity) -> list:
@@ -27,7 +27,7 @@ class UserPublic(BaseModel):
     id: Optional[str]
     name: str
     email: EmailStr
-    role_id: str
+    role_id: Optional[str]
 
 class TokenResponse(BaseModel):
     access_token: str

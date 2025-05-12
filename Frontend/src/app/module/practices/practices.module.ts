@@ -23,7 +23,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     CommonModule,
     PracticesRoutingModule,
     ReactiveFormsModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    
   ]
 })
 export class PracticesModule { }

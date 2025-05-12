@@ -7,7 +7,10 @@ import os
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
+print(MONGO_URI)
+
 DB_NAME = os.getenv("DATABASE_NAME", "repositorio_practicas")
+print(DB_NAME)
 
 # Cliente asíncrono motor
 client = AsyncIOMotorClient(MONGO_URI)

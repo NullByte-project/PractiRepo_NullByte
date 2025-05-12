@@ -45,10 +45,12 @@
       <label for="practice_type">Tipo de Práctica *</label>
       <select id="practice_type" formControlName="practice_type">
         <option value="" disabled selected>Seleccione un tipo</option>
+        <option value="Informes de práctica institucional I">Informes de práctica institucional I</option>
         <option value="Informes de práctica institucional II">Informes de práctica institucional II</option>
         <option value="Informes de proyectos de vida familiar y comunitaria I">Informes de proyectos de vida familiar y comunitaria I</option>
         <option value="Informes de proyectos de vida familiar y comunitaria II">Informes de proyectos de vida familiar y comunitaria II</option>
         <option value="Informes de proyectos de vida familiar y comunitaria III">Informes de proyectos de vida familiar y comunitaria III</option>
+        <option value="Informes de proyectos de vida familiar y comunitaria IV">Informes de proyectos de vida familiar y comunitaria IV</option>
       </select>
       <div *ngIf="practiceForm.get('practice_type')?.invalid && practiceForm.get('practice_type')?.touched" class="error-text">
         <span *ngIf="practiceForm.get('practice_type')?.errors?.['required']">Seleccione un tipo</span>
