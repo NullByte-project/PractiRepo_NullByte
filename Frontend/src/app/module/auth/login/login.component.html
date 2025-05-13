@@ -39,6 +39,7 @@
                                 <span *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</span>
                             </div>
                         </div>
+                        
 
                         <!-- Enlace olvidó contraseña -->
                         <div class="forgot-password">
@@ -65,6 +66,10 @@
                         ¿Necesitas ayuda?
                         <span class="help-icon">?</span>
                     </p>
+                </div>
+                <!-- Agrega esto debajo del formulario o donde quieras mostrar los errores -->
+                <div *ngIf="errorMessage" class="error-message">
+                  {{ errorMessage }}
                 </div>
             </div>
         </div>

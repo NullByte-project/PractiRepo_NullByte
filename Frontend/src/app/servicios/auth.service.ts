@@ -1,18 +1,73 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { configuracionRutasBackend } from '../config/configuracion-rutas';
 import { UserModel } from '../model/user.model';
+import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { Router } from '@angular/router';
+
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private isAuthenticated = new BehaviorSubject<boolean>(false);
+  private currentUser = new BehaviorSubject<any>(null);
   urlLogica: string = configuracionRutasBackend.urlLogica;
-  urlPractices: string = configuracionRutasBackend.urlLogica + '/auth';
+  urlusers: string = configuracionRutasBackend.urlLogica + '/users';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
+  login(email: string, password: string) {
+    return this.http.post<LoginResponse>(`${this.urlusers}/login`, { email, password }).pipe(
+      tap(response => {
+        this.handleAuthentication(response.access_token);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  private handleAuthentication(token: string) {
+    localStorage.setItem('auth_token', token);
+    this.isAuthenticated.next(true);
+    this.router.navigate(['/home']);
+  }
+
+
+
+  getCurrentUser() {
+    return this.currentUser.asObservable();
+  }
+
+
+  private handleError(errorRes: HttpErrorResponse) {
+    let errorMessage = 'Error desconocido';
+
+    // Ajusta según la estructura de errores de tu backend
+    if (errorRes.error && errorRes.error.detail) {
+      errorMessage = errorRes.error.detail;
+    } else if (errorRes.status === 401) {
+      errorMessage = 'Credenciales inválidas';
+    }
+
+    return throwError(() => new Error(errorMessage));
+  }
+
+  get isAuthenticated$() {
+    return this.isAuthenticated.asObservable();
+  }
+  getToken() {
+    return localStorage.getItem('auth_token');
+  }
+  logout() {
+    localStorage.removeItem('auth_token');
+    this.isAuthenticated.next(false);
+    this.router.navigate(['/login']);
+  }
   register(user: UserModel): Promise<any> {
-    return this.http.post<any>(this.urlPractices + '/register', user).toPromise();
+    return this.http.post<any>(this.urlusers + '/register', user).toPromise();
   }
 }
