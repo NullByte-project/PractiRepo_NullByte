@@ -3,7 +3,7 @@ from pydantic import BaseModel, EmailStr
 from controllers.emailController import send_email_controller
 from schemas.schemaEmail import EmailRequest
 
-
+#Post a email
 router = APIRouter(prefix="/email", tags=["email"])
 @router.post("/send")
 async def send_email(data: EmailRequest):
