@@ -1,1 +1,72 @@
-<p>login works!</p>
+<div class="login-container">
+
+    <!-- Contenido principal -->
+    <main class="main-content">
+        <!-- Ilustración izquierda -->
+        <div class="illustration-container">
+            <div class="illustration">
+                <img src="assets/ilustracion1.png" alt="Ilustración">
+            </div>
+        </div>
+
+        <!-- Formulario login derecha -->
+        <div class="form-container">
+            <div class="form-wrapper">
+                <div class="page-title">
+                    <h1>¡Bienvenido!</h1>
+                </div>
+
+                <div class="form-box">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <!-- Campo Email -->
+                        <div class="form-group">
+                            <label for="email">Correo electrónico</label>
+                            <input type="email" id="email" formControlName="email"
+                                [ngClass]="{'error': email?.invalid && email?.touched}">
+                            <div *ngIf="email?.invalid && email?.touched" class="error-message">
+                                <span *ngIf="email?.errors?.['required']">El correo es obligatorio</span>
+                                <span *ngIf="email?.errors?.['email']">Ingrese un correo válido</span>
+                            </div>
+                        </div>
+
+                        <!-- Campo Contraseña -->
+                        <div class="form-group">
+                            <label for="password">Contraseña</label>
+                            <input type="password" id="password" formControlName="password"
+                                [ngClass]="{'error': password?.invalid && password?.touched}">
+                            <div *ngIf="password?.invalid && password?.touched" class="error-message">
+                                <span *ngIf="password?.errors?.['required']">La contraseña es obligatoria</span>
+                                <span *ngIf="password?.errors?.['minlength']">Mínimo 6 caracteres</span>
+                            </div>
+                        </div>
+
+                        <!-- Enlace olvidó contraseña -->
+                        <div class="forgot-password">
+                            <a href="#">¿Olvidó su contraseña?</a>
+                        </div>
+
+                        <!-- Botón de inicio de sesión -->
+                        <button type="submit" class="btn-primary">
+                            Iniciar sesión
+                        </button>
+
+                        <!-- Opción de registro -->
+                        <div class="register-link">
+                            <p>¿No tienes una cuenta?
+                                <a routerLink="/registro">Regístrate</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Ayuda -->
+                <div class="help-section">
+                    <p>
+                        ¿Necesitas ayuda?
+                        <span class="help-icon">?</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

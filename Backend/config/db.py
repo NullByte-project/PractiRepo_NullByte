@@ -12,6 +12,9 @@ print(MONGO_URI)
 DB_NAME = os.getenv("DATABASE_NAME", "repositorio_practicas")
 print(DB_NAME)
 
+BREVO_API_KEY = os.getenv("BREVO_API_KEY")
+print(BREVO_API_KEY)
+
 # Cliente asíncrono motor
 client = AsyncIOMotorClient(MONGO_URI)
 db = client[DB_NAME]

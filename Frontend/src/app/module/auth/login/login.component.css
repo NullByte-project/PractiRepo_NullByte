@@ -1,0 +1,232 @@
+/* Estilos generales */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+a {
+  text-decoration: none;
+  color: #480051;
+}
+
+a:hover {
+  color: #480051;
+}
+
+/* Layout principal */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .main-content {
+    flex-direction: row;
+  }
+}
+
+/* Header */
+.header {
+  background-color: #fff;
+  padding: 15px 0;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.language-selector {
+  display: flex;
+  gap: 15px;
+}
+
+.language-selector button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: #777;
+}
+
+.language-selector button.active {
+  color: #480051;
+}
+
+/* Contenido principal */
+.illustration-container, .form-container {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 768px) {
+  .illustration-container, .form-container {
+    width: 50%;
+  }
+}
+
+.illustration {
+  max-width: 400px;
+  width: 100%;
+}
+
+.illustration img {
+  width: 100%;
+  height: auto;
+}
+
+.form-wrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.page-title {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.page-title h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Formulario */
+.form-box {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #480051;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+input.error {
+  border-color: #EF4444;
+}
+
+.error-message {
+  color: #EF4444;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.btn-primary {
+  display: block;
+  width: 100%;
+  background-color: #480051;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #D97706;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+/* Ayuda */
+.help-section {
+  text-align: center;
+  margin-top: 30px;
+  color: #666;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+}
+
+.help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1px solid #999;
+  margin-left: 8px;
+  font-size: 12px;
+}
+
+/* Footer */
+.footer {
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
+  padding: 15px 0;
+  font-size: 12px;
+  color: #777;
+}
+
+.footer-content {
+  text-align: center;
+  line-height: 1.5;
+}
