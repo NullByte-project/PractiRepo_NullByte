@@ -80,13 +80,5 @@ export class ListPracticesComponent {
     }
     this.router.navigate(['/practices/practice-request', practice.id]);
   });
-}
-  
-  
-  
-  
-  
-  
-  
-
+} 
 }

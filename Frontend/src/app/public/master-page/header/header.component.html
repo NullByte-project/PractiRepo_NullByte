@@ -21,7 +21,10 @@
         <div class="header-actions">
             <div class="header-icons">
                 <a routerLink='/practices/list-practices'><i class="fas fa-list"></i> Listar</a>
-                <a routerLink='/practices/practice-load'><i class="fas fa-upload"></i> Cargar</a>
+                <a *ngIf="(authService.isAuthenticated$ | async) && (authService.getCurrentUser() | async)?.role === 'admin'"
+                    routerLink='/practices/practice-load'>
+                    <i class="fas fa-upload"></i> Cargar
+                </a>
                 <a routerLink="/users/contact-form"><i class="fas fa-info"></i> Información</a>
 
                 <!-- Opciones para usuarios NO autenticados -->
@@ -51,21 +54,23 @@
                             routerLink="/admin/dashboard">
                             <i class="fas fa-shield-alt"></i> Administración
                         </a>
-
                         <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
                             routerLink="/admin/dashboard">
-                            <i class="fas fa-shield-alt"></i> Gestión Practicas
+                            <i class="fas fa-file-alt"></i> Gestión Practicas
                         </a>
-                                                <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
+                        <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
                             routerLink="/admin/dashboard">
-                            <i class="fas fa-shield-alt"></i> Gestión Usuarios
+                            <i class="fas fa-user"></i> Gestión Usuarios
                         </a>
-
-
+                        <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
+                            routerLink="/users/admin-notifications">
+                            <i class="fas fa-bell"></i> Notificaciones
+                        </a>
                         <!-- Opción común para todos los usuarios -->
                         <div class="menu-item" routerLink="/users/user-profile">
                             <i class="fas fa-user-cog"></i> Mi Perfil
                         </div>
+
 
                         <!-- Separador -->
                         <div class="menu-divider"></div>

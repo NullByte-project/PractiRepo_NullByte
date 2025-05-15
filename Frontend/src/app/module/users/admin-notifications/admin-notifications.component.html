@@ -1,0 +1,63 @@
+<div class="admin-notifications-container">
+  <div class="header">
+    <h1>Solicitudes de Documentos</h1>
+    <div class="filters">
+      <select [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()">
+        <option *ngFor="let option of statusOptions" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    Cargando solicitudes...
+  </div>
+
+  <div *ngIf="!isLoading && filteredRequests.length === 0" class="no-results">
+    No se encontraron solicitudes con el filtro aplicado
+  </div>
+
+  <div class="requests-list">
+    <div *ngFor="let request of filteredRequests" class="request-card">
+      <div class="request-header">
+        <span class="practice-title">{{ request.practice_title }}</span>
+        <span class="status-badge" [ngClass]="request.status">
+          {{ request.status | titlecase }}
+        </span>
+      </div>
+
+      <div class="request-details">
+        <div class="detail-item">
+          <i class="fas fa-user"></i>
+          <span>{{ request.requester_name }} ({{ request.requester_email }})</span>
+        </div>
+        
+        <div class="detail-item">
+          <i class="fas fa-calendar"></i>
+          <span>Solicitado el: {{ request.request_date | date:'medium' }}</span>
+        </div>
+
+        <div *ngIf="request.response_date" class="detail-item">
+          <i class="fas fa-calendar-check"></i>
+          <span>Respondido el: {{ request.response_date | date:'medium' }}</span>
+        </div>
+
+        <div *ngIf="request.admin_notes" class="detail-item notes">
+          <i class="fas fa-comment"></i>
+          <span class="notes-text">{{ request.admin_notes }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="request.status === 'pending'" class="request-actions">
+        <button class="btn-approve" (click)="updateRequestStatus(request.id,  DocumentRequestStatus.APPROVED)">
+          <i class="fas fa-check"></i> Aprobar
+        </button>
+        <button class="btn-reject" (click)="updateRequestStatus(request.id, DocumentRequestStatus.REJECTED)">
+          <i class="fas fa-times"></i> Rechazar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

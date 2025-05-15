@@ -23,7 +23,7 @@ export class NotificaconesService {
         Authorization: `Bearer ${this.authService.getToken()}`
       }
     });
-
-
   }
+
+  
 }
