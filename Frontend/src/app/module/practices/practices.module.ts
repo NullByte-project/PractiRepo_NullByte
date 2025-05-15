@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { PracticesRoutingModule } from './practices-routing.module';
 import { ListPracticesComponent } from './list-practices/list-practices.component';
 import { PracticeUploadComponent } from './practice-upload/practice-upload.component';
@@ -9,6 +8,7 @@ import { PracticePreviewComponent } from './practice-preview/practice-preview.co
 import { PracticeLoadComponent } from './practice-load/practice-load.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { PracticeRequestComponent } from './practice-request/practice-request.component';
 
 
 @NgModule({
@@ -17,13 +17,16 @@ import { NgxPaginationModule } from 'ngx-pagination';
     PracticeUploadComponent,
     PracticeDetailComponent,
     PracticePreviewComponent,
-    PracticeLoadComponent
+    PracticeLoadComponent,
+    PracticeRequestComponent,
+   
   ],
   imports: [
     CommonModule,
     PracticesRoutingModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    
     
   ]
 })

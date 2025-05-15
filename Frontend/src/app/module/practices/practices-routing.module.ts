@@ -4,6 +4,7 @@ import { ListPracticesComponent } from './list-practices/list-practices.componen
 import { PracticeUploadComponent } from './practice-upload/practice-upload.component';
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
 import { PracticeLoadComponent } from './practice-load/practice-load.component';
+import { PracticeRequestComponent } from './practice-request/practice-request.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
   {
     path: 'practice-load',
     component: PracticeLoadComponent
+  },
+  {
+    path: 'practice-request/:id',
+    component: PracticeRequestComponent
   }
 ];
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>PractiRepo Header</title>
@@ -9,21 +10,73 @@
 <body>
     <header class="scribd-header">
         <div class="scribd-logo">
-           <a href="">[PractiRepo]</a> 
-           
+            <a routerLink="/">[PractiRepo]</a>
         </div>
+
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
             <input type="text" placeholder="Buscar">
         </div>
+
         <div class="header-actions">
             <div class="header-icons">
                 <a routerLink='/practices/list-practices'><i class="fas fa-list"></i> Listar</a>
                 <a routerLink='/practices/practice-load'><i class="fas fa-upload"></i> Cargar</a>
                 <a routerLink="/users/contact-form"><i class="fas fa-info"></i> Información</a>
-                <a routerLink="/auth/login"><i class="fas fa-user"></i> Iniciar sesión</a>
+
+                <!-- Opciones para usuarios NO autenticados -->
+                <a *ngIf="!(authService.isAuthenticated$ | async)" routerLink="/auth/login">
+                    <i class="fas fa-user"></i> Iniciar sesión
+                </a>
             </div>
-            <a routerLink="/auth/register" class="btn-register">Registrate Ahora!</a>
+
+            <!-- Botón de registro para NO autenticados -->
+            <a *ngIf="!(authService.isAuthenticated$ | async)" routerLink="/auth/register" class="btn-register">
+                Regístrate Ahora!
+            </a>
+
+            <!-- Menú de usuario para autenticados -->
+            <div *ngIf="authService.isAuthenticated$ | async" class="user-menu-container">
+                <div class="user-info" (click)="toggleMenu()">
+                    <span class="user-email">
+                        {{ (authService.getCurrentUser() | async)?.email }}
+                    </span>
+                    <i class="fas fa-caret-down"></i>
+                </div>
+
+                <div class="dropdown-menu" [class.show]="isMenuOpen">
+                    <div class="menu-section">
+                        <!-- Opción para administradores -->
+                        <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
+                            routerLink="/admin/dashboard">
+                            <i class="fas fa-shield-alt"></i> Administración
+                        </a>
+
+                        <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
+                            routerLink="/admin/dashboard">
+                            <i class="fas fa-shield-alt"></i> Gestión Practicas
+                        </a>
+                                                <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
+                            routerLink="/admin/dashboard">
+                            <i class="fas fa-shield-alt"></i> Gestión Usuarios
+                        </a>
+
+
+                        <!-- Opción común para todos los usuarios -->
+                        <div class="menu-item" routerLink="/users/user-profile">
+                            <i class="fas fa-user-cog"></i> Mi Perfil
+                        </div>
+
+                        <!-- Separador -->
+                        <div class="menu-divider"></div>
+
+                        <!-- Opción de cierre de sesión -->
+                        <div class="menu-item" (click)="logout()">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 </body>

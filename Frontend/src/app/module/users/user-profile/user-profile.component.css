@@ -1,0 +1,54 @@
+
+  .profile-container {
+    max-width: 400px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  h2 {
+    text-align: center;
+    color: #333;
+  }
+
+  .profile-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+
+  label {
+    flex: 1;
+    font-weight: bold;
+    color: #555;
+  }
+
+  input {
+    flex: 2;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+  }
+
+  input:focus {
+    background-color: #fff;
+    border-color: #007bff;
+    outline: none;
+  }
+
+  .edit-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 10px;
+    color: #007bff;
+  }
+
+  .edit-btn:hover {
+    color: #0056b3;
+  }

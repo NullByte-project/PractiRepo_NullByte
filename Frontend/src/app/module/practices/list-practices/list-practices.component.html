@@ -86,7 +86,9 @@
 
       <div class="card-actions">
         <a [routerLink]="['/practices/practice-preview', practice.id]" class="action-btn">👁️ Ver</a>
-        <a [href]="practice.file_url" target="_blank" class="action-btn">🔓 Solicitar acceso</a>
+        <!-- Cambiar el botón de solicitar acceso -->
+<a class="action-btn" (click)="requestAccess(practice)">🔓 Solicitar acceso</a>
+        <!-- <a [href]="practice.file_url" target="_blank" class="action-btn">🔓 Solicitar acceso</a> -->
       </div>
     </div>
   </div>

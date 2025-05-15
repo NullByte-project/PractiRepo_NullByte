@@ -1,0 +1,24 @@
+<div class="request-container">
+  <h1>Solicitud de Acceso</h1>
+  
+  <div class="request-card">
+    <div class="request-content">
+      <p>Estás solicitando acceso al documento seleccionado.</p>
+      <p>Una vez aprobada tu solicitud, recibirás el documento por correo electrónico.</p>
+      
+      <button 
+        class="submit-btn"
+        (click)="submitRequest()"
+        [disabled]="isLoading">
+        {{ isLoading ? 'Enviando...' : 'Enviar Solicitud' }}
+      </button>
+      
+      <button 
+        class="cancel-btn"
+        (click)="router.navigate(['/practices/list-practices'])"
+        [disabled]="isLoading">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</div>

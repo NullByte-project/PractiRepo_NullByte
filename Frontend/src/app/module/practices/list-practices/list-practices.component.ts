@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Practice } from 'src/app/model/practice.model';
+import { AuthService } from 'src/app/servicios/auth.service';
 import { ServicioLogicaService } from 'src/app/servicios/servicio-logica.service';
 
 @Component({
@@ -17,6 +19,8 @@ export class ListPracticesComponent {
 
   constructor(
     private servicioLogica: ServicioLogicaService,
+    private authService: AuthService,
+    private router: Router,
     private fb: FormBuilder
   ) {
     this.filterForm = this.fb.group({
@@ -65,4 +69,24 @@ export class ListPracticesComponent {
     this.filterForm.reset();
     this.loadPractices();
   }
+
+
+  requestAccess(practice: any) {
+  this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+    if (!isAuthenticated) {
+      alert('Por favor inicia sesión para solicitar acceso');
+      this.router.navigate(['/auth/login']);
+      return;
+    }
+    this.router.navigate(['/practices/practice-request', practice.id]);
+  });
+}
+  
+  
+  
+  
+  
+  
+  
+
 }

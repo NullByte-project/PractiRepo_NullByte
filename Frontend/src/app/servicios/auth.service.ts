@@ -34,9 +34,26 @@ export class AuthService {
     localStorage.setItem('auth_token', token);
     this.isAuthenticated.next(true);
     this.router.navigate(['/home']);
+    this.decodeAndSetUserData(token);
   }
-
-
+  
+  // En tu auth.service.ts, temporalmente:
+private decodeAndSetUserData(token: string) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        console.log('Payload decodificado:', payload); // Para verificar en consola
+        
+        this.currentUser.next({
+            email: payload.sub,
+            role: payload.role,
+            role_id: payload.role_id,
+            permissions: payload.permissions
+        });
+        
+    } catch (error) {
+        console.error('Error decodificando token:', error);
+    }
+}
 
   getCurrentUser() {
     return this.currentUser.asObservable();
