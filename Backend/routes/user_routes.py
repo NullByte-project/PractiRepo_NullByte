@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Header, Response, status
 from fastapi.responses import JSONResponse
+from config import db
+from config.jwt_depends import JWTBearer, get_current_admin_user, get_current_user, has_permission
+from config.jwt_manager import decode_jwt
 from models.user_models import User
 from controllers.user_controller import (
     find_all_users_controller,
@@ -17,7 +20,17 @@ router = APIRouter(prefix="/users", tags=["users"])
 async def find_all_users():
     return await find_all_users_controller()
 
+@router.get("/mi-perfil")
+async def get_profile(current_user: UserPublic = Depends(get_current_user)):
+    return current_user
 
+@router.get("/descargar", dependencies=[Depends(has_permission("download:document"))])
+async def download_document():
+    return {"msg": "Acceso permitido para descargar"}
+
+@router.get("/admin-only")
+async def admin_endpoint(current_admin: UserPublic = Depends(get_current_admin_user)):
+    return {"msg": f"Bienvenido administrador {current_admin.name}"}
 
 @router.get('/{id}', response_model=UserPublic)
 async def find_user(id: str):
@@ -45,3 +58,8 @@ async def register_user(data: UserCreate):
 async def login(data: UserLogin):
     token = await login_user_controller(data)
     return JSONResponse(content=token.dict(), status_code=200)
+
+
+
+
+

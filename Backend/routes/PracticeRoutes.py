@@ -1,4 +1,7 @@
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
+import os
+from fastapi import APIRouter, Depends, Path, UploadFile, File, Form, HTTPException
+from fastapi.responses import FileResponse
+from config.jwt_depends import get_current_admin_user, get_current_user
 from controllers.practiceController import (
     create_practice,
     get_practice,
@@ -8,8 +11,12 @@ from controllers.practiceController import (
     delete_practice, 
     get_practices_by_filters
 )
+from models.documentRequestModel import DocumentRequestModel
+from models.practiceModel import PracticeModel
 from schemas.schemaPractice import Practice
 from typing import Optional, List
+
+from schemas.user_schema import UserPublic
 
 router = APIRouter(prefix="/practices", tags=["practices"])
 
@@ -86,3 +93,58 @@ async def update_practice_endpoint(
 async def delete_practice_endpoint(practice_id: str):
     await delete_practice(practice_id)
     return None
+
+@router.get(
+    "/{practice_id}/download",
+    response_class=FileResponse,
+    summary="RF12: Descarga de documento permitida solo si solicitud fue aprobada (o si es admin)",
+    responses={
+        403: {"description": "Acceso denegado o solicitud no aprobada"},
+        404: {"description": "Práctica o archivo no encontrado"},
+    }
+)
+async def download_practice_document_endpoint(
+    practice_id: str = Path(..., description="ID de la práctica a descargar"),
+    current_user: UserPublic = Depends(get_current_user)
+):
+    # 1. Validar que la práctica exista
+    practice = await PracticeModel.get_by_id(practice_id)
+    if not practice:
+        raise HTTPException(status_code=404, detail="Práctica no encontrada")
+
+    # 2. Verificar que exista el archivo
+    document_path = practice.get("document_path")
+    if not document_path or not os.path.exists(document_path):
+        raise HTTPException(
+            status_code=404,
+            detail="Archivo no encontrado en el servidor o ruta inválida."
+        )
+
+    # 3. Verificar si el usuario es administrador
+    try:
+        admin_user = await get_current_admin_user(current_user)
+        is_admin = True
+    except HTTPException as e:
+        if e.status_code == 403:
+            is_admin = False
+        else:
+            raise e
+
+    # 4. Si no es admin, verificar solicitud aprobada
+    if not is_admin:
+        approved = await DocumentRequestModel.find_approved_request(
+            practice_id=practice_id,
+            user_id=current_user.id
+        )
+        if not approved:
+            raise HTTPException(
+                status_code=403,
+                detail="Acceso denegado: no tienes una solicitud aprobada para este documento."
+            )
+
+    # 5. Enviar archivo
+    return FileResponse(
+        path=document_path,
+        filename=os.path.basename(document_path),
+        media_type='application/octet-stream'
+    )

@@ -24,26 +24,8 @@ async def find_all_users_controller():
         for u in users
     ]
 
-# async def create_user_controller(user: User) -> UserPublic:
-#     new_user = dict(user)
-#     new_user["password"] = sha256_crypt.hash(new_user["password"])
-#     new_user.pop("id", None)
-#     new_user["_id"] = ObjectId()
-    
-#     # Verifica duplicado
-#     if await db.user.find_one({"_id": new_user["_id"]}):
-#         new_user["_id"] = ObjectId()
-
-#     result = await db.user.insert_one(new_user)
-#     created_user = await db.user.find_one({"_id": result.inserted_id})
-#     return UserPublic(
-#         id=str(created_user["_id"]),
-#         name=created_user["name"],
-#         email=created_user["email"],
-#         role_id=str(created_user.get("role_id")) if created_user.get("role_id") else None
-#     )
-
 async def find_user_controller(id: str) -> UserPublic:
+    print(f"ID recibido: {id}")
     try:
         object_id = ObjectId(id)
     except Exception:
@@ -110,8 +92,7 @@ async def register_user_controller(data: UserCreate) -> UserPublic:
 
     user_dict["password"] = sha256_crypt.hash(user_dict["password"])
 
-    user_dict["role_id"] = ObjectId(user_dict["role_id"])  # ✅ convertir a ObjectId
-
+    user_dict["role_id"] = ObjectId(user_dict["role_id"])  
     result = await db.user.insert_one(user_dict)
     saved = await db.user.find_one({"_id": result.inserted_id})
 
