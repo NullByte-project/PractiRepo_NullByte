@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { configuracionRutasBackend } from '../config/configuracion-rutas';
 import { UserModel } from '../model/user.model';
@@ -36,24 +36,24 @@ export class AuthService {
     this.router.navigate(['/home']);
     this.decodeAndSetUserData(token);
   }
-  
+
   // En tu auth.service.ts, temporalmente:
-private decodeAndSetUserData(token: string) {
+  private decodeAndSetUserData(token: string) {
     try {
-        const payload = JSON.parse(atob(token.split('.')[1]));
-        console.log('Payload decodificado:', payload); // Para verificar en consola
-        
-        this.currentUser.next({
-            email: payload.sub,
-            role: payload.role,
-            role_id: payload.role_id,
-            permissions: payload.permissions
-        });
-        
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      console.log('Payload decodificado:', payload); // Para verificar en consola
+
+      this.currentUser.next({
+        email: payload.sub,
+        role: payload.role,
+        role_id: payload.role_id,
+        permissions: payload.permissions
+      });
+
     } catch (error) {
-        console.error('Error decodificando token:', error);
+      console.error('Error decodificando token:', error);
     }
-}
+  }
 
   getCurrentUser() {
     return this.currentUser.asObservable();
@@ -86,5 +86,23 @@ private decodeAndSetUserData(token: string) {
   }
   register(user: UserModel): Promise<any> {
     return this.http.post<any>(this.urlusers + '/register', user).toPromise();
+  }
+
+  changePassword(currentPassword: string, newPassword: string) {
+    const token = this.getToken();
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post(`${this.urlusers}/change-password`, {
+      current_password: currentPassword,
+      new_password: newPassword
+    }, { headers });
+  }
+
+  resetPassword(email: string) {
+    return this.http.post(`${this.urlusers}/reset-password`, {
+      email: email
+    });
   }
 }
