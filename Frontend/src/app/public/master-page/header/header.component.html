@@ -66,18 +66,15 @@
                             routerLink="/users/admin-notifications">
                             <i class="fas fa-bell"></i> Notificaciones
                         </a>
-
-                        <a *ngIf="(authService.getCurrentUser() | async)?.role === 'admin'" class="menu-item"
-                            routerLink="/auth/change-password">
-                            <i class="fas fa-shield"></i>cambiar contraseña
-                        </a>
-
-                        <!-- Opción común para todos los usuarios -->
+                        <!-- Opciónes común para todos los usuarios -->
                         <div class="menu-item" routerLink="/users/user-profile">
                             <i class="fas fa-user-cog"></i> Mi Perfil
                         </div>
 
-
+                        <div class="menu-item" routerLink="/auth/change-password">
+                            <i class="fas fa-user-cog"></i> Cambiar Contraseña
+                        </div>
+                        
                         <!-- Separador -->
                         <div class="menu-divider"></div>
 
