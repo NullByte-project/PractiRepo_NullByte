@@ -29,6 +29,20 @@ class UserPublic(BaseModel):
     email: EmailStr
     role_id: Optional[str]
 
+class UserRegistrationInput(BaseModel):
+    first_name: str
+    last_name: str
+    email: EmailStr
+    password: str
+    role_id: str
+
+class PasswordChangeRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr
+    
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

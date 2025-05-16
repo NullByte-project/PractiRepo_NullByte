@@ -5,14 +5,16 @@ from config.jwt_depends import JWTBearer, get_current_admin_user, get_current_us
 from config.jwt_manager import decode_jwt
 from models.user_models import User
 from controllers.user_controller import (
+    change_password_controller,
     find_all_users_controller,
     find_user_controller,
     login_user_controller,
     register_user_controller,
+    reset_password_controller,
     update_user_controller,
     delete_user_controller,
 )
-from schemas.user_schema import TokenResponse, UserCreate, UserLogin, UserPublic
+from schemas.user_schema import PasswordChangeRequest, PasswordResetRequest, TokenResponse, UserCreate, UserLogin, UserPublic, UserRegistrationInput
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -50,16 +52,27 @@ async def delete_user(id: str):
         return Response(status_code=status.HTTP_404_NOT_FOUND)
 
 #Logica de login
+# @router.post("/register", response_model=UserPublic)
+# async def register_user(data: UserCreate):
+#     return await register_user_controller(data)
+
 @router.post("/register", response_model=UserPublic)
-async def register_user(data: UserCreate):
-    return await register_user_controller(data)
+async def register_user_endpoint(user_input: UserRegistrationInput):
+    return await register_user_controller(user_input)
+
 
 @router.post("/login", response_model=TokenResponse)
 async def login(data: UserLogin):
     token = await login_user_controller(data)
     return JSONResponse(content=token.dict(), status_code=200)
 
+@router.post("/change-password")
+async def change_password(
+    data: PasswordChangeRequest,
+    current_user: UserPublic = Depends(get_current_user)
+):
+    return await change_password_controller(current_user.email, data)
 
-
-
-
+@router.post("/reset-password")
+async def reset_password(data: PasswordResetRequest):
+    return await reset_password_controller(data)

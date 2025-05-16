@@ -28,7 +28,8 @@ async def create_practice_endpoint(
     file: UploadFile = File(...),
     institution: Optional[str] = Form(None),
     author: Optional[str] = Form(None),
-    municipality: Optional[str] = Form(None)
+    municipality: Optional[str] = Form(None),
+    _=Depends(get_current_admin_user)  # Protección por rol admin
 ):
     return await create_practice(
         title=title,
@@ -76,7 +77,8 @@ async def update_practice_endpoint(
     institution: Optional[str] = Form(None),
     author: Optional[str] = Form(None),
     municipality: Optional[str] = Form(None),
-    file: Optional[UploadFile] = File(None)
+    file: Optional[UploadFile] = File(None),
+    _=Depends(get_current_admin_user)  # Protección por rol admin
 ):
     return await update_practice(
         practice_id=practice_id,
@@ -90,7 +92,10 @@ async def update_practice_endpoint(
     )
 
 @router.delete("/{practice_id}", status_code=204)
-async def delete_practice_endpoint(practice_id: str):
+async def delete_practice_endpoint(
+    practice_id: str,
+    _=Depends(get_current_admin_user)  # Protección por rol admin
+):
     await delete_practice(practice_id)
     return None
 

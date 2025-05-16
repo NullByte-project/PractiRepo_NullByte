@@ -2,14 +2,20 @@ from bson import ObjectId
 from fastapi import HTTPException
 from config.db import db
 from config.jwt_manager import encode_jwt
-from schemas.user_schema import TokenResponse, UserCreate, UserLogin, userEntity, usersEntity, UserPublic
+from controllers.emailController import send_email_controller
+from schemas.user_schema import PasswordChangeRequest, PasswordResetRequest, TokenResponse, UserCreate, UserLogin, UserRegistrationInput, userEntity, usersEntity, UserPublic
 from models.user_models import User
 from passlib.hash import sha256_crypt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import jwt
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+from utils.password_generator import generate_random_password
+
+pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
+
+
+#pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 async def find_all_users_controller():
     users_cursor = db.user.find()
@@ -78,21 +84,37 @@ async def get_user_by_email(email: str):
     return await db.user.find_one({"email": email})
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return sha256_crypt.hash(password)
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return pwd_context.verify(plain, hashed)
+    return sha256_crypt.verify(plain, hashed)
 
-async def register_user_controller(data: UserCreate) -> UserPublic:
+async def register_user_controller(data: UserRegistrationInput) -> UserPublic:
+    # Verificar duplicados
     existing = await db.user.find_one({"email": data.email})
     if existing:
         raise HTTPException(status_code=400, detail="Email ya registrado")
 
-    user_dict = data.dict()
+    # Unir nombre + apellido
+    full_name = f"{data.first_name.strip()} {data.last_name.strip()}"
 
-    user_dict["password"] = sha256_crypt.hash(user_dict["password"])
+    # Convertir al esquema real de creación
+    user_to_create = UserCreate(
+        name=full_name,
+        email=data.email,
+        password=data.password,
+        role_id=data.role_id
+    )
 
-    user_dict["role_id"] = ObjectId(user_dict["role_id"])  
+    # Reutiliza tu lógica ya existente
+    hashed_password = sha256_crypt.hash(user_to_create.password)
+    user_dict = {
+        "name": user_to_create.name,
+        "email": user_to_create.email,
+        "password": hashed_password,
+        "role_id": ObjectId(user_to_create.role_id)
+    }
+
     result = await db.user.insert_one(user_dict)
     saved = await db.user.find_one({"_id": result.inserted_id})
 
@@ -121,3 +143,52 @@ async def login_user_controller(user: UserLogin) -> TokenResponse:
 
     token = encode_jwt(payload)
     return TokenResponse(access_token=token)
+
+# Cambiar contraseña autenticado
+async def change_password_controller(user_email: str, data: PasswordChangeRequest):
+    user = await db.user.find_one({"email": user_email})
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+
+    if not verify_password(data.current_password, user["password"]):
+        raise HTTPException(status_code=401, detail="Contraseña actual incorrecta")
+
+    new_hashed = hash_password(data.new_password)
+    await db.user.update_one({"email": user_email}, {"$set": {"password": new_hashed}})
+    return {"status": "ok", "message": "Contraseña actualizada correctamente"}
+
+async def reset_password_controller(request: PasswordResetRequest):
+    user = await db.user.find_one({"email": request.email})
+
+    # Responder siempre lo mismo, exista o no el usuario, para evitar filtración de emails
+    generic_response = {
+        "status": "ok",
+        "message": "Si el correo está registrado, recibirás una nueva contraseña temporal."
+    }
+
+    if not user:
+        return generic_response
+
+    new_password = generate_random_password()
+    hashed = hash_password(new_password)
+
+    await db.user.update_one({"email": request.email}, {"$set": {"password": hashed}})
+
+    html_content = f"""
+    <h3>Recuperación de contraseña</h3>
+    <p>Tu nueva contraseña temporal es: <strong>{new_password}</strong></p>
+    <p>Por favor inicia sesión y cámbiala lo antes posible.</p>
+    """
+
+    try:
+        await send_email_controller(
+            to_email=request.email,
+            subject="Recuperación de contraseña - PractiRepo",
+            html_content=html_content
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error al enviar el correo: {e}")
+
+    return generic_response
+
+

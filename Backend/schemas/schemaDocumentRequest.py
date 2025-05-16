@@ -13,7 +13,7 @@ class DocumentRequestStatus(str, Enum):
     PENDING = "pending"
     APPROVED = "approved"
     REJECTED = "rejected"
-    DOWNLOADED = "downloaded" # Corregido typo (era DONLOAD)
+    DOWNLOADED = "downloaded"
 
 
 class DocumentRequestCreate(BaseModel):
