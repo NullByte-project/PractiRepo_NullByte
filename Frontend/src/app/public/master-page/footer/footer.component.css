@@ -32,3 +32,48 @@
   .footer-links a:hover {
     color: #00bcd4;
   }
+
+  /* Agrega esto al final de tu archivo CSS */
+app-footer {
+  margin-top: auto;
+  width: 100%;
+}
+
+/* Contenedor principal */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+router-outlet {
+  flex: 1;
+}
+
+/* Estilos específicos para el footer */
+app-footer {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  margin-top: 1rem;
+}
+
+.footer-links a {
+  color: #666;
+  text-decoration: none;
+  margin: 0 1rem;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #480051;
+}

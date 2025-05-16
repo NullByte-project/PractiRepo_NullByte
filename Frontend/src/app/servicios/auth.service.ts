@@ -1,8 +1,8 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { configuracionRutasBackend } from '../config/configuracion-rutas';
-import { UserModel } from '../model/user.model';
-import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
+import { UserModel, UserRegisterModel } from '../model/user.model';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 
 interface LoginResponse {
@@ -55,7 +55,7 @@ export class AuthService {
     }
   }
 
-  getCurrentUser() {
+  getCurrentUser(){
     return this.currentUser.asObservable();
   }
 
@@ -84,9 +84,19 @@ export class AuthService {
     this.isAuthenticated.next(false);
     this.router.navigate(['/login']);
   }
-  register(user: UserModel): Promise<any> {
-    return this.http.post<any>(this.urlusers + '/register', user).toPromise();
+  register(user: UserRegisterModel): Promise<any> {
+    const registrationData = {
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      password: user.password,
+      role_id: user.role_id
+    };
+
+    return this.http.post<any>(`${this.urlusers}/register`, registrationData).toPromise();
   }
+
+
 
   changePassword(currentPassword: string, newPassword: string) {
     const token = this.getToken();

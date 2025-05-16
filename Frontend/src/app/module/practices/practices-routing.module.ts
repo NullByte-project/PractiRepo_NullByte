@@ -7,6 +7,7 @@ import { PracticeLoadComponent } from './practice-load/practice-load.component';
 import { PracticeRequestComponent } from './practice-request/practice-request.component';
 import { AdminGuard } from 'src/app/guards/admin.guard';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { AdminPracticesComponent } from './admin-practices/admin-practices.component';
 
 const routes: Routes = [
   {
@@ -34,6 +35,11 @@ const routes: Routes = [
     path: 'practice-request/:id',
     component: PracticeRequestComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'admin-practices',
+    component: AdminPracticesComponent,
+    canActivate: [AdminGuard]
   }
 ];
 

@@ -1,0 +1,57 @@
+<div class="admin-practices-container">
+  <h2>Administrar Prácticas</h2>
+
+  <div *ngIf="isLoading" class="loading">Cargando prácticas...</div>
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <table *ngIf="!isLoading && practices.length">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Año</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let practice of practices">
+        <td>{{ practice.title }}</td>
+        <td>{{ practice.year }}</td>
+        <td>{{ practice.practice_type }}</td>
+        <td class="actions">
+          <button class="btn-edit" (click)="startEdit(practice)">✏️ Editar</button>
+          <button class="btn-delete" (click)="confirmDelete(practice)">🗑️ Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="selectedPractice" class="edit-modal">
+    <h3>Editar Práctica</h3>
+    
+    <div class="form-group">
+      <label>Título</label>
+      <input type="text" [(ngModel)]="editData.title">
+    </div>
+
+    <div class="form-group">
+      <label>Año</label>
+      <input type="number" [(ngModel)]="editData.year">
+    </div>
+
+    <div class="form-group">
+      <label>Tipo</label>
+      <select [(ngModel)]="editData.practice_type">
+        <option value="Informes de práctica institucional I">Práctica Institucional I</option>
+        <option value="Informes de práctica institucional II">Práctica Institucional II</option>
+        <option value="Proyectos de vida familiar I">Proyectos Vida Familiar I</option>
+        <option value="Proyectos de vida familiar II">Proyectos Vida Familiar II</option>
+      </select>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-save" (click)="updatePractice()">💾 Guardar</button>
+      <button class="btn-cancel" (click)="cancelEdit()">❌ Cancelar</button>
+    </div>
+  </div>
+</div>

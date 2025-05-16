@@ -6,9 +6,10 @@ import { PracticeUploadComponent } from './practice-upload/practice-upload.compo
 import { PracticeDetailComponent } from './practice-detail/practice-detail.component';
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
 import { PracticeLoadComponent } from './practice-load/practice-load.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { PracticeRequestComponent } from './practice-request/practice-request.component';
+import { AdminPracticesComponent } from './admin-practices/admin-practices.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { PracticeRequestComponent } from './practice-request/practice-request.co
     PracticePreviewComponent,
     PracticeLoadComponent,
     PracticeRequestComponent,
+    AdminPracticesComponent,
    
   ],
   imports: [
@@ -26,6 +28,7 @@ import { PracticeRequestComponent } from './practice-request/practice-request.co
     PracticesRoutingModule,
     ReactiveFormsModule,
     NgxPaginationModule,
+    FormsModule
     
     
   ]

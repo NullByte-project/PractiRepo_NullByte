@@ -1,0 +1,69 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Panel de Administración</h1>
+    <div class="header-stats">
+      <div class="stat-card">
+        <h3>Prácticas</h3>
+        <p>{{ stats.totalPractices }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Solicitudes Pendientes</h3>
+        <p>{{ stats.pendingRequests }}</p>
+      </div>
+      <div class="stat-card">
+        <h3>Usuarios</h3>
+        <p>{{ stats.userCount }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div class="main-content">
+    <!-- Sección de Prácticas Recientes -->
+    <div class="section recent-practices">
+      <h2>Prácticas Recientes</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Título</th>
+              <th>Tipo</th>
+              <th>Año</th>
+              <th *ngIf="isAdmin">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let practice of recentPractices">
+              <td>{{ practice.title }}</td>
+              <td>{{ practice.practice_type }}</td>
+              <td>{{ practice.year }}</td>
+              <td *ngIf="isAdmin">
+                <button class="btn-edit">Editar</button>
+                <button class="btn-delete">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Sección de Solicitudes Pendientes (Solo Admin) -->
+    <div class="section pending-requests" *ngIf="isAdmin">
+      <h2>Solicitudes Pendientes</h2>
+      <div class="requests-list">
+        <div class="request-item" *ngFor="let request of pendingRequests">
+          <div class="request-info">
+            <h4>{{ request.practice_title }}</h4>
+            <p>Solicitado por: {{ request.requester_name }}</p>
+            <small>{{ request.requested_at | date:'medium' }}</small>
+          </div>
+          <div class="request-actions">
+            <button class="btn-approve">Aprobar</button>
+            <button class="btn-reject">Rechazar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
