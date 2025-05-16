@@ -5,6 +5,8 @@ import { PracticeUploadComponent } from './practice-upload/practice-upload.compo
 import { PracticePreviewComponent } from './practice-preview/practice-preview.component';
 import { PracticeLoadComponent } from './practice-load/practice-load.component';
 import { PracticeRequestComponent } from './practice-request/practice-request.component';
+import { AdminGuard } from 'src/app/guards/admin.guard';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -25,11 +27,13 @@ const routes: Routes = [
   },
   {
     path: 'practice-load',
-    component: PracticeLoadComponent
+    component: PracticeLoadComponent,
+    canActivate: [AdminGuard]
   },
   {
     path: 'practice-request/:id',
-    component: PracticeRequestComponent
+    component: PracticeRequestComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

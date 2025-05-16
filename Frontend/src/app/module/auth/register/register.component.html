@@ -28,9 +28,9 @@
               </button>
               <button 
                 type="button"
-                [ngClass]="{'active': tipoUsuario?.value === 'egresado'}"
-                (click)="tipoUsuario?.setValue('egresado')">
-                Egresado
+                [ngClass]="{'active': tipoUsuario?.value === 'externo'}"
+                (click)="tipoUsuario?.setValue('externo')">
+                Externo
               </button>
             </div>
 
@@ -130,7 +130,7 @@
             <!-- Opción de iniciar sesión -->
             <div class="login-link">
               <p>¿Ya tienes una cuenta? 
-                <a routerLink="/login">Inicia sesión</a>
+                <a routerLink="/auth/login">Inicia sesión</a>
               </p>
             </div>
           </form>

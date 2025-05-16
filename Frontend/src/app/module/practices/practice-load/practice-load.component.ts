@@ -48,55 +48,43 @@ export class PracticeLoadComponent {
   }
 
   onSubmit() {
-    if (this.practiceForm.invalid) {
-      this.errorMessage = 'Por favor complete todos los campos requeridos';
-      return;
-    }
-
-    this.isLoading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
-
-
-    // Simulación de guardado
-    setTimeout(() => {
-      this.isLoading = false;
-      this.successMessage = 'Práctica guardada con éxito';
-
-      // Redirigir al mismo componente
-      this.router.navigate(['/practices/practice-load']); // Ajusta la ruta según tu configuración
-    }, 2000);
-
-    const formData = new FormData();
-    formData.append('title', this.practiceForm.get('title')?.value);
-    formData.append('year', this.practiceForm.get('year')?.value);
-    formData.append('practice_type', this.practiceForm.get('practice_type')?.value);
-    formData.append('file', this.practiceForm.get('file')?.value);
-
-    // Campos opcionales
-    if (this.practiceForm.get('institution')?.value) {
-      formData.append('institution', this.practiceForm.get('institution')?.value);
-    }
-    if (this.practiceForm.get('author')?.value) {
-      formData.append('author', this.practiceForm.get('author')?.value);
-    }
-    if (this.practiceForm.get('municipality')?.value) {
-      formData.append('municipality', this.practiceForm.get('municipality')?.value);
-    }
-
-    this.servicio.createPractice(formData).subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        this.successMessage = 'Práctica creada exitosamente';
-        setTimeout(() => {
-          this.router.navigate(['/practices']);
-        }, 1500);
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Error al crear la práctica';
-        console.error('Error:', err);
+      if (this.practiceForm.invalid) {
+        this.errorMessage = 'Por favor complete todos los campos requeridos';
+        return;
       }
-    });
-  }
+
+      this.isLoading = true;
+      this.errorMessage = '';
+      this.successMessage = '';
+
+      const formData = new FormData();
+
+      // Agrega todos los campos al FormData
+      formData.append('title', this.practiceForm.get('title')?.value);
+      formData.append('year', this.practiceForm.get('year')?.value);
+      formData.append('practice_type', this.practiceForm.get('practice_type')?.value);
+      formData.append('file', this.practiceForm.get('file')?.value);
+
+      // Campos opcionales
+      const optionalFields = ['institution', 'author', 'municipality'];
+      optionalFields.forEach(field => {
+        const value = this.practiceForm.get(field)?.value;
+        if (value) formData.append(field, value);
+      });
+
+      this.servicio.createPractice(formData).subscribe({
+        next: (response) => {
+          this.isLoading = false;
+          this.successMessage = 'Práctica creada exitosamente';
+          setTimeout(() => {
+            this.router.navigate(['/practices/list-practices']); // Redirige al listado
+          }, 1500);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = err.error?.message || 'Error al crear la práctica';
+          console.error('Error:', err);
+        }
+      });
+    }  
 }

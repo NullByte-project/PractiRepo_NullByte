@@ -4,6 +4,8 @@ import { ContactFormComponent } from './contact-form/contact-form.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AdminNotificationsComponent } from './admin-notifications/admin-notifications.component';
+import { AdminGuard } from 'src/app/guards/admin.guard';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -12,15 +14,18 @@ const routes: Routes = [
   },
   {
     path: 'user-list',
-    component: UserListComponent
+    component: UserListComponent,
+    canActivate: [AdminGuard]
   },
   {
     path: 'user-profile',
-    component: UserProfileComponent
+    component: UserProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'admin-notifications',
-    component: AdminNotificationsComponent
+    component: AdminNotificationsComponent,
+    canActivate: [AdminGuard]
   }
 ];
 

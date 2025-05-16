@@ -4,6 +4,7 @@ import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
 import { ChangePasswordComponent } from './change-password/change-password.component';
 import { RecoverPasswordComponent } from './recover-password/recover-password.component';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 const routes: Routes = [
 {
@@ -16,7 +17,8 @@ const routes: Routes = [
 },
 {
   path: 'change-password',
-  component: ChangePasswordComponent
+  component: ChangePasswordComponent,
+  canActivate: [AuthGuard]
 },
 {
   path: 'recover-password',

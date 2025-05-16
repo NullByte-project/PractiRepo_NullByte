@@ -1,4 +1,5 @@
 <div class="admin-notifications-container">
+  <!-- Filtros y header -->
   <div class="header">
     <h1>Solicitudes de Documentos</h1>
     <div class="filters">
@@ -10,53 +11,52 @@
     </div>
   </div>
 
-  <div *ngIf="isLoading" class="loading">
-    <div class="spinner"></div>
-    Cargando solicitudes...
-  </div>
-
-  <div *ngIf="!isLoading && filteredRequests.length === 0" class="no-results">
-    No se encontraron solicitudes con el filtro aplicado
-  </div>
-
+  <!-- Listado de solicitudes -->
   <div class="requests-list">
     <div *ngFor="let request of filteredRequests" class="request-card">
       <div class="request-header">
+        <span class="practice-title">{{ request._id }}</span>
         <span class="practice-title">{{ request.practice_title }}</span>
+        <span class="practice-title">{{ request.requester_name }}</span>
+        <span class="practice-title">{{ request.requester_email }}</span>
+        <span class="practice-title">{{ request.request_date }}</span>
+
         <span class="status-badge" [ngClass]="request.status">
           {{ request.status | titlecase }}
         </span>
       </div>
 
+      <!-- Detalles de la solicitud -->
       <div class="request-details">
-        <div class="detail-item">
-          <i class="fas fa-user"></i>
-          <span>{{ request.requester_name }} ({{ request.requester_email }})</span>
-        </div>
-        
-        <div class="detail-item">
-          <i class="fas fa-calendar"></i>
-          <span>Solicitado el: {{ request.request_date | date:'medium' }}</span>
-        </div>
-
-        <div *ngIf="request.response_date" class="detail-item">
-          <i class="fas fa-calendar-check"></i>
-          <span>Respondido el: {{ request.response_date | date:'medium' }}</span>
-        </div>
-
-        <div *ngIf="request.admin_notes" class="detail-item notes">
-          <i class="fas fa-comment"></i>
-          <span class="notes-text">{{ request.admin_notes }}</span>
-        </div>
+        <!-- ... otros detalles ... -->
       </div>
 
-      <div *ngIf="request.status === 'pending'" class="request-actions">
-        <button class="btn-approve" (click)="updateRequestStatus(request.id,  DocumentRequestStatus.APPROVED)">
+      <!-- Acciones -->
+      <div class="request-actions" *ngIf="request.status === DocumentRequestStatus.PENDING">
+        <button class="btn-approve" (click)="updateRequestStatus(request, DocumentRequestStatus.APPROVED)">
           <i class="fas fa-check"></i> Aprobar
         </button>
-        <button class="btn-reject" (click)="updateRequestStatus(request.id, DocumentRequestStatus.REJECTED)">
-          <i class="fas fa-times"></i> Rechazar
-        </button>
+
+        <div class="reject-section" *ngIf="selectedRequest?.id === request._id; else showRejectButton">
+          <textarea [(ngModel)]="adminNotes" 
+                    placeholder="Motivo del rechazo (opcional)"
+                    maxlength="500"></textarea>
+          <div class="reject-buttons">
+            <button class="btn-confirm-reject" 
+                    (click)="updateRequestStatus(request, DocumentRequestStatus.REJECTED)">
+              Confirmar Rechazo
+            </button>
+            <button class="btn-cancel" (click)="cancelReject()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+
+        <ng-template #showRejectButton>
+          <button class="btn-reject" (click)="prepareReject(request)">
+            <i class="fas fa-times"></i> Rechazar
+          </button>
+        </ng-template>
       </div>
     </div>
   </div>

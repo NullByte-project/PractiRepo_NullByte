@@ -1,5 +1,5 @@
 export interface DocumentRequest {
-  id: string;
+  _id: string;
   practice_id: string;
   practice_title: string;
   requester_name: string;
