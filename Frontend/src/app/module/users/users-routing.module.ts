@@ -6,6 +6,8 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { AdminNotificationsComponent } from './admin-notifications/admin-notifications.component';
 import { AdminGuard } from 'src/app/guards/admin.guard';
 import { AuthGuard } from 'src/app/guards/auth.guard';
+import { AdminUsersComponent } from './admin-users/admin-users.component';
+import { DashboardAdminComponent } from './dashboard-admin/dashboard-admin.component';
 
 const routes: Routes = [
   {
@@ -25,6 +27,15 @@ const routes: Routes = [
   {
     path: 'admin-notifications',
     component: AdminNotificationsComponent,
+    canActivate: [AdminGuard]
+  },
+  {
+    path: 'admin-users',
+    component: AdminUsersComponent,
+    canActivate: [AdminGuard]
+  },{
+    path: 'dashboard-admin',
+    component: DashboardAdminComponent,
     canActivate: [AdminGuard]
   }
 ];

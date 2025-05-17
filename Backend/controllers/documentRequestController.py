@@ -103,7 +103,8 @@ async def manage_document_request_admin_controller(
     request_info_dict = await DocumentRequestModel.get_by_id_enriched(request_id)
     if not request_info_dict:
         raise HTTPException(status_code=404, detail=f"Document request with id {request_id} not found")
-
+    
+    
     if request_info_dict.get("status") != DocumentRequestStatus.PENDING.value:
         raise HTTPException(status_code=400, detail=f"Only PENDING requests can be managed. Current status: {request_info_dict.get('status')}")
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { configuracionRutasBackend } from '../config/configuracion-rutas';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { catchError, Observable, of } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -24,6 +24,22 @@ export class NotificaconesService {
       }
     });
   }
+  // En tu NotificacionesService
+getDocumentRequests(status?: string): Observable<any[]> {
+  const params = status ? new HttpParams().set('status', status) : new HttpParams();
+  return this.http.get<any[]>(`${this.apiUrl}/admin/all`, { params }).pipe(
+    catchError(error => {
+      console.error('Error obteniendo solicitudes:', error);
+      return of([]); // Retorna array vacío en caso de error
+    })
+  );
+}
+  
+  
+  
+  
+  
+  
 
   
 }

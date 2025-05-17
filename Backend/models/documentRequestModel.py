@@ -64,7 +64,7 @@ class DocumentRequestModel:
         """Obtiene una solicitud por ID y la enriquece."""
         try:
             obj_id = ObjectId(request_id)
-        except Exception: # Captura errores si request_id no es un ObjectId válido
+        except Exception: 
             return None
         request = await cls.collection.find_one({"_id": obj_id})
         return await cls._enrich_request_data(request)
@@ -75,13 +75,13 @@ class DocumentRequestModel:
         try:
             user_obj_id = ObjectId(user_id)
         except Exception:
-            return [] # O manejar el error de forma diferente
+            return []
         cursor = cls.collection.find({"requested_by_id": user_obj_id}).sort("request_date", -1)
         requests = await cursor.to_list(length=None)
         enriched_requests = []
         for r in requests:
             enriched_data = await cls._enrich_request_data(r)
-            if enriched_data: # Asegurarse de que el enriquecimiento no devuelva None
+            if enriched_data: 
                  enriched_requests.append(enriched_data)
         return enriched_requests
 
@@ -120,7 +120,7 @@ class DocumentRequestModel:
         update_fields = {
             "status": new_status.value,
             "response_date": datetime.utcnow(),
-            "response_by_id": admin_obj_id # Almacenar como ObjectId
+            "response_by_id": admin_obj_id 
         }
         if admin_notes is not None:
             update_fields["admin_notes"] = admin_notes
@@ -128,7 +128,6 @@ class DocumentRequestModel:
               # Si quieres permitir borrarlo, usarías "$unset": {"admin_notes": ""} si era opcional.
               # Por ahora, si es None, no lo incluimos en $set.
             pass
-
 
         result = await cls.collection.update_one({"_id": obj_id}, {"$set": update_fields})
         return result.modified_count > 0

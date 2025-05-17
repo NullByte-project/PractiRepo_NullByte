@@ -41,13 +41,13 @@ export class ServicioLogicaService {
 
 
   // createPractice(formData: FormData): Observable<Practice> {
-    // return this.http.post<Practice>(this.urlPractices, formData);
+  // return this.http.post<Practice>(this.urlPractices, formData);
   // }
 
   createPractice(formData: FormData) {
     // Obtener el token del AuthService
     const token = this.authService.getToken();
-    
+
     // Crear headers con el token
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
@@ -60,5 +60,30 @@ export class ServicioLogicaService {
   getPreview(practiceId: string): Observable<PreviewFragment[]> {
     return this.http.get<PreviewFragment[]>(`${this.urlPreview}/${practiceId}`);
   }
+
+
+  private getHeaders() {
+    return new HttpHeaders({
+      'Authorization': `Bearer ${this.authService.getToken()}`
+    });
+  }
+
+  getAllPractices() {
+    return this.http.get<any[]>(this.urlPractices, { headers: this.getHeaders() });
+  }
+
+  deletePractice(practiceId: string) {
+    return this.http.delete(`${this.urlPractices}/${practiceId}`, {
+      headers: this.getHeaders(),
+      responseType: 'text'
+    });
+  }
+
+  updatePractice(practiceId: string, updateData: any) {
+    return this.http.put(`${this.urlPractices}/${practiceId}`, updateData, {
+      headers: this.getHeaders()
+    });
+  }
+
 
 }
