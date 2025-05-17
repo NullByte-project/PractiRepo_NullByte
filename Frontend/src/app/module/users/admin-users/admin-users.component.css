@@ -24,6 +24,7 @@ th {
 .actions {
   display: flex;
   gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .btn-edit, .btn-delete {
@@ -67,7 +68,8 @@ th {
   margin-bottom: 0.5rem;
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 0.8rem;
   border: 1px solid #ddd;
@@ -78,18 +80,25 @@ th {
   display: flex;
   gap: 1rem;
   margin-top: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .btn-save {
   background: #2196F3;
   color: white;
   padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .btn-cancel {
   background: #ff9800;
   color: white;
   padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .loading {
@@ -104,4 +113,43 @@ th {
   background: #f8d7da;
   border-radius: 4px;
   margin: 1rem 0;
+}
+
+/* ----------- Responsive Design ------------ */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  td {
+    padding: 0.5rem 0;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #555;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
