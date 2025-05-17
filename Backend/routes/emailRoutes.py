@@ -32,7 +32,7 @@ async def send_contact_form(data: ContactFormRequest):
     </body>
     </html>
     """
-    admin_email = "fabianguancha13@gmail.com"
+    admin_email = "erleycabrera062@gmail.com"
 
     try:
         return await send_email_controller(

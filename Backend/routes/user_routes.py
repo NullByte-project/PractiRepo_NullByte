@@ -6,6 +6,7 @@ from config.jwt_manager import decode_jwt
 from models.user_models import User
 from controllers.user_controller import (
     change_password_controller,
+    create_user_by_admin_controller,
     find_all_users_controller,
     find_user_controller,
     login_user_controller,
@@ -33,6 +34,13 @@ async def download_document():
 @router.get("/admin-only")
 async def admin_endpoint(current_admin: UserPublic = Depends(get_current_admin_user)):
     return {"msg": f"Bienvenido administrador {current_admin.name}"}
+
+@router.post("/admin/create", response_model=UserPublic)
+async def create_user_by_admin_endpoint(
+    user_data: UserCreate,
+    _=Depends(get_current_admin_user)  # Protección por rol admin
+):
+    return await create_user_by_admin_controller(user_data)
 
 @router.get('/{id}', response_model=UserPublic)
 async def find_user(id: str):

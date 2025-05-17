@@ -30,6 +30,33 @@ async def find_all_users_controller():
         for u in users
     ]
 
+async def create_user_by_admin_controller(user_data: UserCreate) -> UserPublic:
+    # Verificar si el correo ya está registrado
+    existing = await db.user.find_one({"email": user_data.email})
+    if existing:
+        raise HTTPException(status_code=400, detail="Email ya registrado")
+
+    # Hashear la contraseña
+    hashed_password = sha256_crypt.hash(user_data.password)
+
+    user_dict = {
+        "name": user_data.name.strip(),
+        "email": user_data.email.strip(),
+        "password": hashed_password,
+        "role_id": ObjectId(user_data.role_id)
+    }
+
+    result = await db.user.insert_one(user_dict)
+    new_user = await db.user.find_one({"_id": result.inserted_id})
+
+    return UserPublic(
+        id=str(new_user["_id"]),
+        name=new_user["name"],
+        email=new_user["email"],
+        role_id=str(new_user["role_id"])
+    )
+
+
 async def find_user_controller(id: str) -> UserPublic:
     print(f"ID recibido: {id}")
     try:
