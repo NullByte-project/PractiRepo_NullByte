@@ -25,9 +25,8 @@ def sanitize_ids(data: dict) -> dict:
     return data
 
 
-# -------------------------------
-# RF10: Usuario solicita descarga
-# -------------------------------
+
+#Usuario solicita descarga
 async def create_document_request_controller(
     practice_id: str,
     current_user: UserPublic = Depends(get_current_user)
@@ -71,9 +70,8 @@ async def create_document_request_controller(
     return DocumentRequestPublic(**sanitize_ids(request_data_dict))
 
 
-# --------------------------------------------------
-# RF10.1: Ver historial de solicitudes del usuario
-# --------------------------------------------------
+
+#Ver historial de solicitudes del usuario
 async def get_my_document_requests_controller(
     current_user: UserPublic = Depends(get_current_user)
 ) -> List[DocumentRequestPublic]:
@@ -81,9 +79,7 @@ async def get_my_document_requests_controller(
     return [DocumentRequestPublic(**sanitize_ids(r_dict)) for r_dict in requests_dicts]
 
 
-# ------------------------------------------
-# RF11: Admin lista todas las solicitudes
-# ------------------------------------------
+#Admin lista todas las solicitudes
 async def get_all_document_requests_admin_controller(
     status: Optional[DocumentRequestStatus] = None,
     _=Depends(get_current_admin_user)  # Protección por rol admin
@@ -92,9 +88,8 @@ async def get_all_document_requests_admin_controller(
     return [DocumentRequestPublic(**sanitize_ids(r_dict)) for r_dict in results_dicts]
 
 
-# -----------------------------------------
-# RF11 + RF12: Admin gestiona la solicitud
-# -----------------------------------------
+
+#Admin gestiona la solicitud
 async def manage_document_request_admin_controller(
     request_id: str,
     update_data: DocumentRequestUpdateAdmin,
@@ -125,7 +120,7 @@ async def manage_document_request_admin_controller(
     if not updated_request_dict:
         raise HTTPException(status_code=500, detail="Failed to retrieve updated request details.")
 
-    # --- Correo al usuario ---
+    #Correo al usuario
     try:
         user_email = updated_request_dict.get("requester_email")
         user_name = updated_request_dict.get("requester_name", "Usuario")
