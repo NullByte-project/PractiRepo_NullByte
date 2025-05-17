@@ -63,7 +63,7 @@ def test_id07_cp01_send_contact_form_mocked():
     print("✅ ID07-CP-01 passed (mocked)")
 
 if __name__ == "__main__":
-    test_id04_cp01_create_request_mocked()
-    #test_id07_cp01_send_contact_form_mocked()
+    # test_id04_cp01_create_request_mocked()
+    test_id07_cp01_send_contact_form_mocked()
 
     
