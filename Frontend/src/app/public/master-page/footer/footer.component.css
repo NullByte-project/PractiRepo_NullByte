@@ -1,45 +1,49 @@
 .footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-  }
-  
-  .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .footer-links {
-    list-style: none;
-    padding: 0;
-    margin: 10px 0 0;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .footer-links li {
-    display: inline;
-  }
-  
-  .footer-links a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  
-  .footer-links a:hover {
-    color: #00bcd4;
-  }
-
-  /* Agrega esto al final de tu archivo CSS */
-app-footer {
-  margin-top: auto;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
   width: 100%;
 }
 
-/* Contenedor principal */
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.footer-links li {
+  display: inline;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #00bcd4;
+}
+
+app-footer {
+  margin-top: auto;
+  width: 100%;
+  background: #f8f9fa;
+  padding: 2rem;
+  border-top: 1px solid #e0e0e0;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -50,30 +54,51 @@ router-outlet {
   flex: 1;
 }
 
-/* Estilos específicos para el footer */
-app-footer {
-  background: #f8f9fa;
-  padding: 2rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
+/* Reajustes visuales generales */
 .footer-links {
   margin-top: 1rem;
 }
 
 .footer-links a {
-  color: #666;
+  color: #ccc;
   text-decoration: none;
   margin: 0 1rem;
-  transition: color 0.3s;
 }
 
 .footer-links a:hover {
-  color: #480051;
+  color: #00bcd4;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+/* 🌐 MEDIA QUERY: Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  .footer-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .footer-links a {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .footer-content p {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+
+    .footer-content {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .footer {
+    padding: 24px 12px;
+  }
 }

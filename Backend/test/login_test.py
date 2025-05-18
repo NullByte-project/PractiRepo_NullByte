@@ -2,9 +2,12 @@ import io
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
+from dotenv import load_dotenv
+load_dotenv()
 from fastapi.testclient import TestClient
 from main import app
+
+user_token = os.getenv("USER_TOKEN_TEST")
 
 client = TestClient(app)
 def test_id08_cp01_login_valid_credentials():
@@ -53,7 +56,6 @@ def test_id08_cp03_reset_password_registered_email():
 
 def test_id08_cp04_user_changes_password():
     # 🛡️ Token JWT válido para un usuario
-    user_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlcmxleWNhYnJlcmEwNjJAZ21haWwuY29tIiwicm9sZV9pZCI6IjY4MjAyZTA0M2NkYzRjMTQxYTMwYzBmNSIsInJvbGUiOiJzdHVkZW50IiwicGVybWlzc2lvbnMiOlsicmVhZCIsInJlcXVlc3RfZG93bmxvYWQiXSwiZXhwIjoxNzQ3NTE1NTg2fQ.3HfIZnx9RkH5JzRMAj1pdACbooaEIaCXpN8tQ67Ukzg"
     
     payload = {
         "current_password": "Qdka65h1cX",   # Asegúrate que sea la actual

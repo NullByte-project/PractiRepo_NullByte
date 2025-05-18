@@ -15,14 +15,15 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of users">
-        <td>{{ user.name }}</td>
-        <td>{{ user.email }}</td>
-        <td>{{ user.role_id?.name || user.role_id }}</td>
-        <td class="actions">
-          <button class="btn-edit" (click)="startEdit(user)">✏️ Editar</button>
-          <button class="btn-delete" (click)="confirmDelete(user)">🗑️ Eliminar</button>
-        </td>
-      </tr>
+        <td data-label="Nombre">{{ user.name }}</td>
+        <td data-label="Email">{{ user.email }}</td>
+        <td data-label="Rol">{{ user.role_id?.name || user.role_id }}</td>
+        <td data-label="Acciones" class="actions">
+        <button class="btn-edit" (click)="startEdit(user)">✏️ Editar</button>
+        <button class="btn-delete" (click)="confirmDelete(user)">🗑️ Eliminar</button>
+  </td>
+</tr>
+
     </tbody>
   </table>
 

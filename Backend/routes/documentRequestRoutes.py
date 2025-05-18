@@ -1,12 +1,11 @@
 # routes/document_request_routes.py
-from fastapi import APIRouter, Depends, Path, Body, Query, status as http_status # Importar status
+from fastapi import APIRouter, Depends, Path, Body, Query, status as http_status
 from typing import List, Optional
 
 from schemas.schemaDocumentRequest import (
     DocumentRequestPublic,
     DocumentRequestUpdateAdmin,
     DocumentRequestStatus,
-    # DocumentRequestCreate # Ya no se usa como body si practice_id es path param
 )
 from schemas.user_schema import UserPublic
 from controllers.documentRequestController import (
@@ -15,27 +14,29 @@ from controllers.documentRequestController import (
     get_all_document_requests_admin_controller,
     manage_document_request_admin_controller
 )
-# Asegúrate que la ruta a tus dependencias de JWT sea correcta
 from config.jwt_depends import get_current_user, get_current_admin_user, has_permission
 
+# Definición del router para las solicitudes de descarga de documentos
 router = APIRouter(prefix="/document-requests", tags=["Document Download Requests"])
 
 @router.post(
     "/request/{practice_id}",
     response_model=DocumentRequestPublic,
     summary="RF10: Usuario solicita descargar un documento",
-    status_code=http_status.HTTP_201_CREATED # Código correcto para creación exitosa
+    status_code=http_status.HTTP_201_CREATED  # Código HTTP 201 para creación exitosa
 )
 async def request_document_download_endpoint(
     practice_id: str = Path(..., description="ID de la práctica a solicitar"),
     current_user: UserPublic = Depends(get_current_user),
-    # Asegúrate que el permiso "request_download" esté asignado a los roles de usuario correspondientes
-    # y que se incluya en el token JWT durante el login.
-    # _=Depends(has_permission("request_download")) # Descomentar si ya tienes la gestión de permisos en JWT lista
+    # _=Depends(has_permission("request_download")) # Descomentar si se usa control de permisos por JWT
 ):
-    # La dependencia has_permission ya lanzaría HTTPException si no tiene el permiso.
+    """
+    Endpoint para que un usuario solicite la descarga de un documento.
+    Recibe el ID de la práctica y el usuario autenticado.
+    Retorna la solicitud creada.
+    """
+    # La dependencia has_permission lanzaría HTTPException si no tiene permiso
     return await create_document_request_controller(practice_id=practice_id, current_user=current_user)
-
 
 @router.get(
     "/my-requests",
@@ -45,22 +46,28 @@ async def request_document_download_endpoint(
 async def get_my_download_requests_endpoint(
     current_user: UserPublic = Depends(get_current_user)
 ):
+    """
+    Endpoint para que un usuario consulte sus solicitudes de descarga.
+    Retorna una lista de solicitudes realizadas por el usuario actual.
+    """
     return await get_my_document_requests_controller(current_user=current_user)
 
+# --- Rutas exclusivas para administradores ---
 
-# --- Rutas para Administradores ---
 @router.get(
     "/admin/all",
     response_model=List[DocumentRequestPublic],
-    summary="RF11: Administrador obtiene todas las solicitudes de descarga (puede filtrar por estado)"
+    summary="RF11: Administrador obtiene todas las solicitudes de descarga (filtrables por estado)"
 )
 async def get_all_download_requests_for_admin_endpoint(
-    status: Optional[DocumentRequestStatus] = Query(None, description="Filtrar por estado de la solicitud"),
-    # current_admin: UserPublic = Depends(get_current_admin_user) # La dependencia ya valida
-    _=Depends(get_current_admin_user) # Solo para proteger la ruta
+    status: Optional[DocumentRequestStatus] = Query(None, description="Filtrar solicitudes por estado"),
+    _=Depends(get_current_admin_user)  # Protección para solo administradores
 ):
+    """
+    Endpoint para que un administrador obtenga todas las solicitudes de descarga.
+    Permite filtrar por estado (pendiente, aprobado, rechazado, descargado).
+    """
     return await get_all_document_requests_admin_controller(status=status)
-
 
 @router.put(
     "/admin/manage/{request_id}",
@@ -70,8 +77,13 @@ async def get_all_download_requests_for_admin_endpoint(
 async def manage_download_request_by_admin_endpoint(
     request_id: str = Path(..., description="ID de la solicitud a gestionar"),
     update_data: DocumentRequestUpdateAdmin = Body(...),
-    current_admin: UserPublic = Depends(get_current_admin_user) # Para obtener el ID del admin
+    current_admin: UserPublic = Depends(get_current_admin_user)
 ):
+    """
+    Endpoint para que un administrador actualice el estado de una solicitud de descarga.
+    Recibe el ID de la solicitud, los datos de actualización y el usuario administrador.
+    Retorna la solicitud actualizada.
+    """
     return await manage_document_request_admin_controller(
         request_id=request_id,
         update_data=update_data,

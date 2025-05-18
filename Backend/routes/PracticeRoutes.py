@@ -14,12 +14,13 @@ from controllers.practiceController import (
 from models.documentRequestModel import DocumentRequestModel
 from models.practiceModel import PracticeModel
 from schemas.schemaPractice import Practice
+from schemas.user_schema import UserPublic
 from typing import Optional, List
 
-from schemas.user_schema import UserPublic
-
+# Ruta base para operaciones sobre prácticas académicas
 router = APIRouter(prefix="/practices", tags=["practices"])
 
+# Crear una nueva práctica (solo para administradores)
 @router.post("/", response_model=Practice, status_code=201)
 async def create_practice_endpoint(
     title: str = Form(...),
@@ -29,7 +30,7 @@ async def create_practice_endpoint(
     institution: Optional[str] = Form(None),
     author: Optional[str] = Form(None),
     municipality: Optional[str] = Form(None),
-    _=Depends(get_current_admin_user)  # Protección por rol admin
+    _: UserPublic = Depends(get_current_admin_user)
 ):
     return await create_practice(
         title=title,
@@ -41,13 +42,18 @@ async def create_practice_endpoint(
         municipality=municipality
     )
 
-#obtener practicas por filtro 
+# Obtener prácticas por filtros opcionales
 @router.get("/filter", response_model=List[Practice])
-async def read_practices_by_filter(title: Optional[str] = None, year: Optional[int] = None, 
-                                   practice_type: Optional[str] = None, institution: Optional[str] = None, author: Optional[str] = None, 
-                                   municipality: Optional[str] = None):
+async def read_practices_by_filter(
+    title: Optional[str] = None,
+    year: Optional[int] = None,
+    practice_type: Optional[str] = None,
+    institution: Optional[str] = None,
+    author: Optional[str] = None,
+    municipality: Optional[str] = None
+):
     return await get_practices_by_filters(
-        title = title,
+        title=title,
         year=year,
         municipality=municipality,
         practice_type=practice_type,
@@ -55,19 +61,22 @@ async def read_practices_by_filter(title: Optional[str] = None, year: Optional[i
         author=author
     )
 
+# Obtener una práctica por su ID
 @router.get("/{practice_id}", response_model=Practice)
 async def read_practice(practice_id: str):
     return await get_practice(practice_id)
 
+# Obtener todas las prácticas
 @router.get("/", response_model=List[Practice])
 async def read_all_practices():
     return await get_all_practices()
 
-
+# Obtener prácticas por tipo específico
 @router.get("/type/{practice_type}", response_model=List[Practice])
 async def read_practices_by_type(practice_type: str):
     return await get_practices_by_type(practice_type)
 
+# Actualizar una práctica (solo admin)
 @router.put("/{practice_id}", response_model=Practice)
 async def update_practice_endpoint(
     practice_id: str,
@@ -78,7 +87,7 @@ async def update_practice_endpoint(
     author: Optional[str] = Form(None),
     municipality: Optional[str] = Form(None),
     file: Optional[UploadFile] = File(None),
-    _=Depends(get_current_admin_user)  # Protección por rol admin
+    _: UserPublic = Depends(get_current_admin_user)
 ):
     return await update_practice(
         practice_id=practice_id,
@@ -91,14 +100,17 @@ async def update_practice_endpoint(
         file=file
     )
 
+# Eliminar una práctica (solo admin)
 @router.delete("/{practice_id}", status_code=204)
 async def delete_practice_endpoint(
     practice_id: str,
-    _=Depends(get_current_admin_user)  # Protección por rol admin
+    _: UserPublic = Depends(get_current_admin_user)
 ):
     await delete_practice(practice_id)
     return None
 
+# Descargar el archivo de una práctica
+# - Accesible solo si la solicitud fue aprobada o el usuario es administrador
 @router.get(
     "/{practice_id}/download",
     response_class=FileResponse,
@@ -112,12 +124,12 @@ async def download_practice_document_endpoint(
     practice_id: str = Path(..., description="ID de la práctica a descargar"),
     current_user: UserPublic = Depends(get_current_user)
 ):
-    # 1. Validar que la práctica exista
+    # 1. Validar existencia de la práctica
     practice = await PracticeModel.get_by_id(practice_id)
     if not practice:
         raise HTTPException(status_code=404, detail="Práctica no encontrada")
 
-    # 2. Verificar que exista el archivo
+    # 2. Verificar existencia del archivo asociado
     document_path = practice.get("document_path")
     if not document_path or not os.path.exists(document_path):
         raise HTTPException(
@@ -125,9 +137,9 @@ async def download_practice_document_endpoint(
             detail="Archivo no encontrado en el servidor o ruta inválida."
         )
 
-    # 3. Verificar si el usuario es administrador
+    # 3. Intentar validar si el usuario es administrador
     try:
-        admin_user = await get_current_admin_user(current_user)
+        await get_current_admin_user(current_user)
         is_admin = True
     except HTTPException as e:
         if e.status_code == 403:
@@ -135,7 +147,7 @@ async def download_practice_document_endpoint(
         else:
             raise e
 
-    # 4. Si no es admin, verificar solicitud aprobada
+    # 4. Si no es admin, verificar si tiene una solicitud aprobada
     if not is_admin:
         approved = await DocumentRequestModel.find_approved_request(
             practice_id=practice_id,
@@ -147,7 +159,7 @@ async def download_practice_document_endpoint(
                 detail="Acceso denegado: no tienes una solicitud aprobada para este documento."
             )
 
-    # 5. Enviar archivo
+    # 5. Retornar archivo
     return FileResponse(
         path=document_path,
         filename=os.path.basename(document_path),

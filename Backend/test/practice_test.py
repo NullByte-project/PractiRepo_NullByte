@@ -52,7 +52,7 @@ def test_list_all_practices():
     print("test_list_all_practices passed")
 
 def test_get_practice_by_id():
-    practice_id = "67f71902d6324b57ae758b13"  # 🔁 Reemplaza con un ID válido
+    practice_id = "67f71902d6324b57ae758b13"  #Reemplaza con un ID válido
     response = client.get(f"/practices/{practice_id}")
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
@@ -60,7 +60,7 @@ def test_get_practice_by_id():
     print("test_get_practice_by_id passed")
 
 def test_update_practice_with_file():
-    practice_id = "67f71902d6324b57ae758b13"  # 🔁 Reemplaza con un ID válido
+    practice_id = "67f71902d6324b57ae758b13"  #Reemplaza con un ID válido
     with open("uploads/1744247042.pdf", "rb") as f:
         response = client.put(
             f"/practices/{practice_id}",
@@ -80,7 +80,7 @@ def test_update_practice_with_file():
     print("test_update_practice_with_file passed")
 
 def test_delete_practice():
-    practice_id = "67fb0b6eb47e8bc29d7c43b8"  # 🔁 Reemplaza con un ID válido
+    practice_id = "67fb0b6eb47e8bc29d7c43b8"  #Reemplaza con un ID válido
     response = client.delete(f"/practices/{practice_id}")
     assert response.status_code == 204
     print("Practice deleted successfully")
@@ -89,11 +89,13 @@ def test_delete_practice():
 
 
 if __name__ == "__main__":
-    #test_create_practice()
-    #test_create_practice_invalid_file()
-    #test_list_all_practices()
-    #test_get_practice_by_id()
-    #test_update_practice_with_file()
+    """ 
+    test_create_practice()
+    test_create_practice_invalid_file()
+    test_list_all_practices()
+    test_get_practice_by_id()
+    test_update_practice_with_file() 
+    """
     test_delete_practice()
     print("Test passed!")
 
