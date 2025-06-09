@@ -14,7 +14,7 @@ client = TestClient(app)
 # ✅ Variables desde .env
 admin_token = os.getenv("ADMIN_TOKEN_TEST")
 user_token = os.getenv("USER_TOKEN_TEST")
-role_id = os.getenv("DEFAULT_ROLE_ID_TEST", "68202e043cdc4c141a30c0f5")  # ObjectId de rol
+role_id = os.getenv("DEFAULT_ROLE_ID_TEST")  # ObjectId de rol
 practice_id = os.getenv("PRACTICE_ID_TEST", "68279717e46f2880908ac9c4")  # ID válido de práctica
 
 
